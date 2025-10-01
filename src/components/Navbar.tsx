@@ -11,7 +11,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           {/* Added hover animation for brand name */}
           <div className="text-xl font-bold text-amber-400 hover:text-amber-300 transition-colors duration-300">
-            YourBrand
+            Boostify
           </div>
 
           {/* Mobile menu button */}
