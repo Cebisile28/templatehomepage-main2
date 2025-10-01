@@ -10,10 +10,10 @@ const Footer = () => {
           <div className="space-y-4">
             {/* Added hover animation for brand name */}
             <h3 className="text-xl font-bold text-amber-400 mb-4 hover:text-amber-300 transition-colors duration-300">
-              YourBrand
+              Boostify
             </h3>
             <p className="mb-4">
-              A modern starter template with a clean design using black, gold, and silver gray colors.
+              Boost your world.
             </p>
           </div>
           {/* Using Flexbox for link columns */}
@@ -53,7 +53,7 @@ const Footer = () => {
             <address className="not-italic space-y-2">
               <p>123 Main Street</p>
               <p>Anytown, USA 12345</p>
-              <p className="mt-2">info@yourbrand.com</p>
+              <p className="mt-2">info@boostify.com</p>
               <p>(123) 456-7890</p>
             </address>
           </div>
@@ -61,7 +61,7 @@ const Footer = () => {
         {/* Added subtle animation for copyright text */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="hover:text-amber-400 transition-colors duration-300">
-            &copy; {new Date().getFullYear()} YourBrand. All rights reserved.
+            &copy; {new Date().getFullYear()} Boostify. All rights reserved.
           </p>
         </div>
       </div>
