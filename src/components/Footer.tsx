@@ -1,72 +1,82 @@
-import React from 'react';
+import React from "react";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
-    // Using CSS Grid for responsive footer layout
-    <footer className="bg-black text-gray-400">
-      <div className="container mx-auto px-4 py-10">
-        {/* Responsive grid layout with different column counts */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <footer className="bg-gradient-to-b from-black via-gray-900 to-black text-gray-400 relative overflow-hidden">
+      {/* Decorative gradient line */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 animate-pulse" />
+
+      <div className="container mx-auto px-4 py-14 relative z-10">
+        {/* Grid layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 animate-[fadeIn_1s_ease-in-out_forwards]">
+          {/* Brand Section */}
           <div className="space-y-4">
-            {/* Added hover animation for brand name */}
-            <h3 className="text-xl font-bold text-amber-400 mb-4 hover:text-amber-300 transition-colors duration-300">
+            <h3 className="text-2xl font-extrabold text-amber-400 mb-4 hover:text-amber-300 transition-all duration-300 hover:tracking-wide">
               Boostify
             </h3>
-            <p className="mb-4">
-              Boost your world.
+            <p className="text-gray-400 max-w-xs">
+              Empowering brands with elegant, modern web experiences. 🚀
             </p>
-          </div>
-          {/* Using Flexbox for link columns */}
-          <div className="flex flex-col">
-            <h4 className="text-white font-bold mb-4">Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Home</a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">About</a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Services</a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Contact</a>
-              </li>
-            </ul>
-          </div>
-          <div className="flex flex-col">
-            <h4 className="text-white font-bold mb-4">Resources</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Documentation</a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Blog</a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-400 transition-colors duration-300 hover:pl-2">Support</a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Contact</h4>
-            <address className="not-italic space-y-2">
-              <p>123 Main Street</p>
-              <p>Anytown, USA 12345</p>
-              <p className="mt-2">info@boostify.com</p>
-              <p>(123) 456-7890</p>
-            </address>
-          </div>
-        </div>
-        {/* Added subtle animation for copyright text */}
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="hover:text-amber-400 transition-colors duration-300">
-            &copy; {new Date().getFullYear()} Boostify. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-};
 
-export default Footer;
+            {/* Social Media Icons */}
+            <div className="flex space-x-4 mt-4">
+              {[
+                { icon: <FaFacebook />, href: "#" },
+                { icon: <FaTwitter />, href: "#" },
+                { icon: <FaLinkedin />, href: "#" },
+                { icon: <FaInstagram />, href: "#" },
+              ].map(({ icon, href }, index) => (
+                <a
+                  key={index}
+                  href={href}
+                  className="text-gray-400 hover:text-amber-400 transition-transform duration-300 hover:scale-125"
+                  aria-label="Social link"
+                >
+                  {icon}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-white font-bold mb-4 border-l-4 border-amber-400 pl-3">
+              Links
+            </h4>
+            <ul className="space-y-2">
+              {["Home", "About", "Services", "Contact"].map((link) => (
+                <li key={link}>
+                  <a
+                    href="#"
+                    className="hover:text-amber-400 transition-all duration-300 hover:pl-2 block"
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="text-white font-bold mb-4 border-l-4 border-amber-400 pl-3">
+              Resources
+            </h4>
+            <ul className="space-y-2">
+              {["Documentation", "Blog", "Support"].map((link) => (
+                <li key={link}>
+                  <a
+                    href="#"
+                    className="hover:text-amber-400 transition-all duration-300 hover:pl-2 block"
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="text-white font-bold mb-4 border-l

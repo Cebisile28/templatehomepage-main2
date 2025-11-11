@@ -1,76 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import DarkModeToggle from "./DarkModeToggle";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar = () => {
-  // Added state for mobile menu
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  // Add shadow when scrolling
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location]);
+
+  // Navigation links
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
   return (
-    // Using Flexbox for navbar layout
-    <header className="bg-black text-white shadow-md fixed w-full top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          {/* Added hover animation for brand name */}
-          <div className="text-xl font-bold text-amber-400 hover:text-amber-300 transition-colors duration-300">
-            Boostify
-          </div>
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-black/90 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo / Brand Name */}
+        <Link
+          to="/"
+          className="text-2xl font-extrabold text-amber-400 hover:text-amber-300 transition-colors duration-300"
+        >
+          Boostify
+        </Link>
 
-          {/* Mobile menu button */}
-          <button 
-            className="md:hidden text-white hover:text-amber-400 transition-colors duration-300"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg 
-              className="w-6 h-6" 
-              fill="none" 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth="2" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`relative text-sm font-medium uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-amber-400 rounded transition-colors duration-300 ${
+                location.pathname === link.path
+                  ? "text-amber-400"
+                  : "text-gray-300 hover:text-amber-300"
+              }`}
             >
-              {isMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
+              {link.name}
+              {/* Active underline animation */}
+              {location.pathname === link.path && (
+                <motion.span
+                  layoutId="underline"
+                  className="absolute left-0 -bottom-1 w-full h-[2px] bg-amber-400"
+                />
               )}
-            </svg>
-          </button>
-
-          {/* Desktop navigation */}
-          <nav className="hidden md:block">
-            <ul className="flex space-x-6">
-              {['Home', 'About', 'Services', 'Contact'].map((item, index) => (
-                <li key={index}>
-                  <a 
-                    href="#" 
-                    className="hover:text-amber-400 transition-all duration-300 hover:scale-110 inline-block"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            </Link>
+          ))}
+          <DarkModeToggle />
         </div>
 
-        {/* Mobile navigation */}
-        <nav className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} mt-4`}>
-          <ul className="flex flex-col space-y-4">
-            {['Home', 'About', 'Services', 'Contact'].map((item, index) => (
-              <li key={index}>
-                <a 
-                  href="#" 
-                  className="block hover:text-amber-400 transition-colors duration-300 hover:pl-2"
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </header>
-  );
-};
-
-export default Navbar;
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle Menu"
+          className="md:hidden text-gray-300 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 rounded p-1"
+        >
+          {menuOpen ? (
+            <XMarkIcon className="h-7 w-7" />
