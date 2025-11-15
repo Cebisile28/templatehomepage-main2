@@ -7,7 +7,7 @@ type Product = {
   image: string;
 };
 
-const DynamicData: React.FC = () => {
+export const DynamicData: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -44,9 +44,7 @@ const DynamicData: React.FC = () => {
           </div>
         )}
 
-        {error && (
-          <p className="text-red-500 text-center">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-center">{error}</p>}
 
         {!loading && !error && (
           <div className="grid md:grid-cols-3 gap-8">
@@ -74,5 +72,3 @@ const DynamicData: React.FC = () => {
     </section>
   );
 };
-
-export default DynamicData;

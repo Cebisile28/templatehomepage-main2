@@ -1,6 +1,7 @@
+// ...existing code...
 import React from "react";
-import Services from "../components/Services";
-import Footer from "../components/Footer";
+import Services from "../Services";
+import Footer from "../Footer";
 import { Helmet } from "react-helmet"; // ✅ SEO
 
 const ServicesPage: React.FC = () => {
@@ -60,3 +61,4 @@ const ServicesPage: React.FC = () => {
 };
 
 export default ServicesPage;
+// ...existing code...
