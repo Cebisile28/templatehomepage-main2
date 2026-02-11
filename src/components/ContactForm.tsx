@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { db } from '../firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -63,11 +63,13 @@ const ContactForm: React.FC = () => {
     }
 
     try {
-      await addDoc(collection(db, 'messages'), {
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        message: formData.message.trim(),
-      });
+      await addDoc(collection(db, "messages"), {
+  name: formData.name.trim(),
+  email: formData.email.trim(),
+  message: formData.message.trim(),
+  created: Timestamp.now(), // ✅ correct usage
+});
+
       setFormData({ name: '', email: '', message: '' });
       toast.success('Message sent successfully!', {
   position: "top-right",

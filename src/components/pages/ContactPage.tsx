@@ -1,6 +1,6 @@
 import React from "react";
-import ContactForm from "../components/ContactForm";
-import Footer from "../components/Footer";
+import ContactForm from "../ContactForm";
+import Footer from "../Footer";
 import { Helmet } from "react-helmet"; // ✅ SEO
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
