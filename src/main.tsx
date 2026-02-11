@@ -1,28 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import ServicesPage from "./pages/ServicesPage";
-import ContactPage from "./pages/ContactPage";
+import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
+import App from "./App";
+import "./index.css"; // Tailwind / global styles
 
-const App: React.FC = () => {
-  return (
-    <Router>
-      <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-        <Navbar />
+const container = document.getElementById("root");
 
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
-  );
-};
+if (!container) {
+  throw new Error("Root container missing in index.html");
+}
 
-export default App;
+const root = createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  </React.StrictMode>
+);
+// ...existing code...

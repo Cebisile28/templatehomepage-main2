@@ -4,9 +4,15 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import DarkModeToggle from "./DarkModeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Define the type for navLinks
+type NavLink = {
+  name: string;
+  path: string;
+};
+
 const Navbar: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false); // Explicit boolean type
+  const [scrolled, setScrolled] = useState<boolean>(false); // Explicit boolean type
   const location = useLocation();
 
   // Add shadow when scrolling
@@ -21,8 +27,8 @@ const Navbar: React.FC = () => {
     setMenuOpen(false);
   }, [location]);
 
-  // Navigation links
-  const navLinks = [
+  // Define navLinks with the correct type
+  const navLinks: NavLink[] = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
     { name: "About", path: "/about" },
@@ -38,7 +44,7 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo / Brand Name */}
+        {/* Logo */}
         <Link
           to="/"
           className="text-2xl font-extrabold text-amber-400 hover:text-amber-300 transition-colors duration-300"
@@ -52,14 +58,13 @@ const Navbar: React.FC = () => {
             <Link
               key={link.name}
               to={link.path}
-              className={`relative text-sm font-medium uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-amber-400 rounded transition-colors duration-300 ${
+              className={`relative text-sm font-medium uppercase tracking-wide transition-colors duration-300 ${
                 location.pathname === link.path
                   ? "text-amber-400"
                   : "text-gray-300 hover:text-amber-300"
               }`}
             >
               {link.name}
-              {/* Active underline animation */}
               {location.pathname === link.path && (
                 <motion.span
                   layoutId="underline"
@@ -79,3 +84,45 @@ const Navbar: React.FC = () => {
         >
           {menuOpen ? (
             <XMarkIcon className="h-7 w-7" />
+          ) : (
+            <Bars3Icon className="h-7 w-7" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-black/95 backdrop-blur-md px-6 pb-6"
+          >
+            <div className="flex flex-col gap-4 mt-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`text-sm uppercase tracking-wide ${
+                    location.pathname === link.path
+                      ? "text-amber-400"
+                      : "text-gray-300 hover:text-amber-300"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <DarkModeToggle />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+

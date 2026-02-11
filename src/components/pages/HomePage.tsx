@@ -3,18 +3,17 @@
  * ---------------------------------------------------------
  *  File: /src/components/pages/HomePage.tsx
  *  Description: Main homepage of the Boostify website.
- *  This file lives inside the "components/pages" directory.
  * ---------------------------------------------------------
  */
 
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
-// 🧩 Page Components (fixed relative paths)
+// 🧩 Page Components (correct relative paths)
 import Hero from "../Hero";
 import Features from "../Features";
 import Footer from "../Footer";
-import { DynamicData } from "../../utils/DynamicData"; // <- named import (matches export)
+import { DynamicData } from "../DynamicData"; // named export
 
 const HomePage: React.FC = () => {
   return (
@@ -88,4 +87,5 @@ const HomePage: React.FC = () => {
 
 export default HomePage;
 // ...existing code...
+
 

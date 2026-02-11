@@ -2,10 +2,11 @@ import React from 'react';
 import {
   CubeIcon,
   ShieldCheckIcon,
-  TrendingUpIcon,
-} from '@heroicons/react/24/outline'; // Using outline icons for a clean look
+  ArrowTrendingUpIcon,
+} from '@heroicons/react/24/outline';
+// Using outline icons for a clean look
 
-const Services: React.FC = () => {
+const ServicesSection: React.FC = () => {
   return (
     <section
       id="services"
@@ -37,7 +38,7 @@ const Services: React.FC = () => {
 
           {/* Service 3 */}
           <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-transform hover:-translate-y-1">
-            <TrendingUpIcon className="h-10 w-10 text-amber-400 mb-4" />
+           <ArrowTrendingUpIcon className="h-10 w-10 text-amber-400 mb-4" />
             <h3 className="text-xl font-semibold mb-2">Growth Tools</h3>
             <p className="text-gray-600">
               We offer powerful, user-friendly resources designed to optimize
@@ -60,4 +61,4 @@ const Services: React.FC = () => {
   );
 };
 
-export default Services;
+export default ServicesSection;

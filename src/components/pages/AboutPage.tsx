@@ -1,7 +1,7 @@
 import React from "react";
-import About from "../components/About";
-import Footer from "../components/Footer";
-import { Helmet } from "react-helmet"; // ✅ For SEO optimization
+import About from "../About";
+import Footer from "../Footer";
+import { Helmet } from "react-helmet-async";
 import { UsersIcon, LightBulbIcon, HeartIcon } from "@heroicons/react/24/outline";
 
 const AboutPage: React.FC = () => {
