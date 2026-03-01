@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 type Product = {
   id: number;
   title: string;
-  price: number;
+  price: number; // This comes in USD
   image: string;
 };
 
@@ -12,8 +12,10 @@ export const DynamicData: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // 💱 USD → ZAR exchange rate (change if needed)
+  const exchangeRate = 19; 
+
   useEffect(() => {
-    // Fetch data from a public API
     fetch("https://fakestoreapi.com/products?limit=3")
       .then((res) => res.json())
       .then((data) => {
@@ -48,27 +50,39 @@ export const DynamicData: React.FC = () => {
 
         {!loading && !error && (
           <div className="grid md:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
-              >
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="h-48 w-full object-contain mb-4"
-                />
-                <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-2">
-                  {product.title}
-                </h3>
-                <p className="text-amber-600 font-semibold">
-                  ${product.price.toFixed(2)}
-                </p>
-              </div>
-            ))}
+            {products.map((product) => {
+              // 🔁 Convert USD to ZAR
+              const priceInRand = product.price * exchangeRate;
+
+              return (
+                <div
+                  key={product.id}
+                  className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="h-48 w-full object-contain mb-4"
+                  />
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-2">
+                    {product.title}
+                  </h3>
+
+                  {/* 💰 Proper Converted Rand Price */}
+                  <p className="text-amber-600 font-semibold">
+                    {priceInRand.toLocaleString("en-ZA", {
+                      style: "currency",
+                      currency: "ZAR",
+                    })}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
     </section>
   );
 };
+
+   

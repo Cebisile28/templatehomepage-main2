@@ -11,7 +11,7 @@ const About: React.FC = () => {
         {/* Left: Image Section */}
         <div className="relative group">
           <img
-            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+            src="/images/image1.png" // Changed to local image path
             alt="About Boostify team"
             className="rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-500"
           />
@@ -33,8 +33,8 @@ const About: React.FC = () => {
             style={{ animationDelay: "0.4s" }}
           >
             At Boostify, we empower creators, startups, and businesses with tools
-            and designs that make growth effortless. Our mission is simple —
-            deliver clean, functional, and modern digital experiences that stand
+            and designs that make growth effortless. Our mission is simple — 
+            deliver clean, functional, and modern digital experiences that stand 
             out in today’s crowded landscape.
           </p>
 
