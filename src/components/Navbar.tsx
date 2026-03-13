@@ -47,9 +47,9 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl font-extrabold text-amber-400 hover:text-amber-300 transition-colors duration-300"
+          className="text-2xl font-extrabold text-amber-400 hover:text-amber-300 transition-colors duration-300 flex items-center gap-1"
         >
-          Boostify
+          <span className="font-bold">⚡</span> Boostify
         </Link>
 
         {/* Desktop Menu */}

@@ -11,8 +11,8 @@ const Footer = () => {
           
           {/* Brand Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-extrabold text-amber-400 mb-4">
-              Boostify
+            <h3 className="text-2xl font-extrabold text-amber-400 mb-4 flex items-center gap-1">
+              <span className="font-bold">⚡</span> Boostify
             </h3>
             <p className="text-gray-400 max-w-xs">
               Empowering brands with elegant, modern web experiences.
