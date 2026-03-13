@@ -43,12 +43,12 @@ const ContactPage: React.FC = () => {
           <div className="flex flex-col items-center bg-white dark:bg-gray-900 p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300">
             <PhoneIcon className="w-10 h-10 text-amber-400 mb-3" />
             <h3 className="font-semibold text-xl mb-2">Phone</h3>
-            <p>(123) 456-7890</p>
+            <p>068 253 1912</p>
           </div>
           <div className="flex flex-col items-center bg-white dark:bg-gray-900 p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300">
             <MapPinIcon className="w-10 h-10 text-amber-400 mb-3" />
             <h3 className="font-semibold text-xl mb-2">Address</h3>
-            <p>123 Main Street, Anytown, USA</p>
+            <p>Durban, South Africa</p>
           </div>
         </div>
       </section>
