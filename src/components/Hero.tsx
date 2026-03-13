@@ -22,8 +22,8 @@ const Hero: React.FC = () => {
         >
           {/* Headline */}
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-            Grow Faster with{" "}
-            <span className="text-amber-400">Boostify</span>
+            Supercharge Your Business with{" "}
+            <span className="text-amber-400 font-bold">⚡ Boostify</span>
           </h1>
 
           {/* Subtext */}
