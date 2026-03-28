@@ -1,4 +1,3 @@
-// ...existing code...
 /**
  * ---------------------------------------------------------
  *  File: /src/components/pages/HomePage.tsx
@@ -86,6 +85,5 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-// ...existing code...
 
 

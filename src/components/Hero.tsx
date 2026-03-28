@@ -2,6 +2,9 @@ import React from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 
+// 🖼️ Import your image (THIS is the important fix)
+import websiteImage from "../assets/images/website-image.png";
+
 const Hero: React.FC = () => {
   return (
     <section className="relative overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -61,7 +64,7 @@ const Hero: React.FC = () => {
           className="mt-16 lg:mt-0 lg:w-1/2 flex justify-center"
         >
           <img
-            src="/image/image2.png"
+            src={websiteImage}   // ✅ FIXED HERE
             alt="Boostify Digital Growth"
             className="w-full max-w-md lg:max-w-xl rounded-2xl shadow-2xl hover:shadow-amber-400/30 transition-all duration-500"
           />
