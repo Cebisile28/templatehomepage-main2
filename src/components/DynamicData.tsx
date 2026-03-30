@@ -1,84 +1,112 @@
 import React, { useEffect, useState } from "react";
 
-type Product = {
+type Repo = {
   id: number;
-  title: string;
-  image: string;
+  name: string;
+  description: string;
+  language: string;
+  html_url: string;
+  stargazers_count: number;
 };
 
 export const DynamicData: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [filteredRepos, setFilteredRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null); // 👈 For modal
+
+  const GITHUB_USERNAME = "Cebisile28";
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products?limit=3")
+    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos`)
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data);
+        setRepos(data);
+        setFilteredRepos(data);
         setLoading(false);
       })
       .catch(() => {
-        setError("Failed to load products. Please try again later.");
+        setError("Failed to load repositories.");
         setLoading(false);
       });
   }, []);
 
+  const filterRepos = (language: string) => {
+    if (language === "All") {
+      setFilteredRepos(repos);
+    } else {
+      const filtered = repos.filter((repo) => repo.language === language);
+      setFilteredRepos(filtered);
+    }
+  };
+
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-500">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
-          Latest Products
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
+          My Projects & Skills
         </h2>
 
-        {loading && (
-          <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg animate-pulse h-96"
-              ></div>
-            ))}
-          </div>
-        )}
+        {/* 🔘 Filter Buttons */}
+        <div className="flex justify-center gap-4 mb-10 flex-wrap">
+          {["All", "JavaScript", "TypeScript", "Python"].map((lang) => (
+            <button
+              key={lang}
+              onClick={() => filterRepos(lang)}
+              className="bg-amber-400 px-4 py-2 rounded-md font-semibold hover:bg-amber-500 transition"
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
 
+        {/* ⏳ Loading */}
+        {loading && <p className="text-center">Loading...</p>}
+
+        {/* ❌ Error */}
         {error && <p className="text-red-500 text-center">{error}</p>}
 
+        {/* 📦 Repo Cards */}
         {!loading && !error && (
           <div className="grid md:grid-cols-3 gap-8">
-            {products.map((product) => (
+            {filteredRepos.map((repo) => (
               <div
-                key={product.id}
-                className="relative bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:scale-105 transition-all duration-300"
+                key={repo.id}
+                className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:scale-105 transition-all duration-300"
               >
-                {/* Product Image */}
-                <div className="relative">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="h-48 w-full object-contain mb-4 rounded-lg transition-transform duration-300 hover:scale-110"
-                  />
-
-                  {/* New Product Badge */}
-                  <span className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-bold py-1 px-2 rounded-md">
-                    New
-                  </span>
-                </div>
-
-                {/* Product Title */}
-                <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-4">
-                  {product.title}
+                <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-gray-100">
+                  {repo.name}
                 </h3>
 
-                {/* Quick View Button */}
-                <div className="flex justify-between items-center mt-4">
-                  <button className="bg-amber-400 text-black font-semibold py-2 px-6 rounded-md hover:bg-amber-500 transition duration-200">
-                    Quick View
-                  </button>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {repo.description || "No description available"}
+                </p>
 
-                  {/* Optional: Add to Cart Button */}
-                  <button className="bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-md hover:bg-gray-400 transition duration-200">
-                    Add to Cart
+                <p className="text-sm text-amber-500">
+                  {repo.language || "Unknown"}
+                </p>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  ⭐ {repo.stargazers_count}
+                </p>
+
+                {/* Buttons */}
+                <div className="flex justify-between items-center mt-4">
+                  <a
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-amber-400 text-black font-semibold py-2 px-6 rounded-md hover:bg-amber-500 transition duration-200"
+                  >
+                    View Project
+                  </a>
+
+                  <button
+                    onClick={() => setSelectedRepo(repo)} // 👈 Open modal
+                    className="bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-md hover:bg-gray-400 transition duration-200"
+                  >
+                    See Details
                   </button>
                 </div>
               </div>
@@ -86,6 +114,42 @@ export const DynamicData: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 🌟 Modal */}
+      {selectedRepo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-gray-700 rounded-lg p-8 max-w-md w-full relative">
+            <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+              {selectedRepo.name}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-2">
+              {selectedRepo.description || "No description available"}
+            </p>
+            <p className="text-sm text-amber-500 mb-2">
+              Language: {selectedRepo.language || "Unknown"}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              ⭐ {selectedRepo.stargazers_count} stars
+            </p>
+            <a
+              href={selectedRepo.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black text-amber-400 px-4 py-2 rounded-md hover:bg-gray-800 transition font-semibold"
+            >
+              View Project on GitHub
+            </a>
+
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedRepo(null)}
+              className="absolute top-2 right-2 text-gray-700 dark:text-gray-200 font-bold text-lg"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
