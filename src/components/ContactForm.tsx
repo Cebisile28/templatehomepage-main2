@@ -11,22 +11,16 @@ type FormState = {
 };
 
 const ContactForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormState>({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState<FormState>({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [loading, setLoading] = useState(false);
 
   const validate = (): Partial<FormState> => {
     const newErrors: Partial<FormState> = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required.';
-    else if (formData.name.trim().length < 2) newErrors.name = 'Name is too short.';
-    if (!formData.email.trim()) newErrors.email = 'Email is required.';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) newErrors.email = 'Email is invalid.';
-    if (!formData.message.trim()) newErrors.message = 'Message is required.';
-    else if (formData.message.trim().length < 10) newErrors.message = 'Message is too short.';
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+    if (!formData.message.trim()) newErrors.message = 'Message is required';
     return newErrors;
   };
 
@@ -37,7 +31,6 @@ const ContactForm: React.FC = () => {
     setErrors(prev => {
       const copy = { ...prev };
       if (name in copy) {
-        // @ts-ignore - dynamic key removal
         delete copy[name as keyof FormState];
       }
       return copy;
@@ -64,23 +57,23 @@ const ContactForm: React.FC = () => {
 
     try {
       await addDoc(collection(db, "messages"), {
-  name: formData.name.trim(),
-  email: formData.email.trim(),
-  message: formData.message.trim(),
-  created: Timestamp.now(), // ✅ correct usage
-});
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: formData.message.trim(),
+        created: Timestamp.now(), // ✅ correct usage
+      });
 
       setFormData({ name: '', email: '', message: '' });
       toast.success('Message sent successfully!', {
-  position: "top-right",
-  autoClose: 3000
-});
+        position: "top-right",
+        autoClose: 3000
+      });
     } catch (err) {
       console.error('Firestore error:', err);
       toast.error('Failed to send message.', {
-  position: "top-right",
-  autoClose: 3000
-});
+        position: "top-right",
+        autoClose: 3000
+      });
     } finally {
       setLoading(false);
     }

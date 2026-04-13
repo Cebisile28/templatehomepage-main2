@@ -11,7 +11,7 @@ const About: React.FC = () => {
         {/* Left: Image Section */}
         <div className="relative group">
           <img
-            src="/images/image1.png" // Changed to local image path
+            src="/optimized/images_image1.webp"
             alt="About Boostify team"
             className="rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-500"
           />
@@ -43,50 +43,23 @@ const About: React.FC = () => {
             style={{ animationDelay: "0.6s" }}
           >
             {/* Value 1 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-amber-400/10 transition-all duration-300">
-              <SparklesIcon className="h-10 w-10 text-amber-400 mb-2" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                Innovation
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Always evolving to stay ahead of design and tech trends.
-              </p>
+            <div className="flex flex-col items-center">
+              <SparklesIcon className="h-8 w-8 text-amber-400 mb-2" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Innovation</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 text-center">We drive innovation with cutting-edge solutions.</p>
             </div>
-
             {/* Value 2 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-amber-400/10 transition-all duration-300">
-              <UserGroupIcon className="h-10 w-10 text-amber-400 mb-2" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                Collaboration
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Working hand-in-hand with clients to bring ideas to life.
-              </p>
+            <div className="flex flex-col items-center">
+              <UserGroupIcon className="h-8 w-8 text-amber-400 mb-2" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Community</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Building strong communities around our products.</p>
             </div>
-
             {/* Value 3 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-amber-400/10 transition-all duration-300">
-              <LightBulbIcon className="h-10 w-10 text-amber-400 mb-2" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                Creativity
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Turning innovative ideas into practical, stunning solutions.
-              </p>
+            <div className="flex flex-col items-center">
+              <LightBulbIcon className="h-8 w-8 text-amber-400 mb-2" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Creativity</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Fostering creativity in every project we undertake.</p>
             </div>
-          </div>
-
-          {/* Call-to-Action */}
-          <div
-            className="mt-10 opacity-0 animate-[bounceIn_1s_ease-in-out_forwards]"
-            style={{ animationDelay: "1s" }}
-          >
-            <a
-              href="/contact"
-              className="inline-block bg-amber-400 hover:bg-amber-500 text-black font-semibold px-8 py-4 rounded-md transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg"
-            >
-              Learn More About Us
-            </a>
           </div>
         </div>
       </div>

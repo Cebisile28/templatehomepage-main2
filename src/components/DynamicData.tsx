@@ -14,32 +14,62 @@ export const DynamicData: React.FC = () => {
   const [filteredRepos, setFilteredRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null); // 👈 For modal
+  const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
 
   const GITHUB_USERNAME = "Cebisile28";
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchRepos = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(
+          `https://api.github.com/users/${GITHUB_USERNAME}/repos`
+        );
+
+        if (!res.ok) {
+          throw new Error("GitHub API error");
+        }
+
+        const data = await res.json();
+
         setRepos(data);
         setFilteredRepos(data);
-        setLoading(false);
-      })
-      .catch(() => {
+      } catch (err) {
         setError("Failed to load repositories.");
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchRepos();
   }, []);
 
   const filterRepos = (language: string) => {
     if (language === "All") {
       setFilteredRepos(repos);
     } else {
-      const filtered = repos.filter((repo) => repo.language === language);
-      setFilteredRepos(filtered);
+      setFilteredRepos(
+        repos.filter((repo) => repo.language === language)
+      );
     }
   };
+
+  // ✅ LOADING STATE (THIS IS THE IMPORTANT PART)
+  if (loading) {
+    return (
+      <p className="text-center py-10 text-gray-600 dark:text-gray-300">
+        Loading projects...
+      </p>
+    );
+  }
+
+  // ❌ ERROR STATE
+  if (error) {
+    return (
+      <p className="text-center py-10 text-red-500">{error}</p>
+    );
+  }
 
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-500">
@@ -48,7 +78,7 @@ export const DynamicData: React.FC = () => {
           My Projects & Skills
         </h2>
 
-        {/* 🔘 Filter Buttons */}
+        {/* Filter Buttons */}
         <div className="flex justify-center gap-4 mb-10 flex-wrap">
           {["All", "JavaScript", "TypeScript", "Python"].map((lang) => (
             <button
@@ -61,89 +91,83 @@ export const DynamicData: React.FC = () => {
           ))}
         </div>
 
-        {/* ⏳ Loading */}
-        {loading && <p className="text-center">Loading...</p>}
+        {/* Repo Grid */}
+        <div className="grid md:grid-cols-3 gap-8">
+          {filteredRepos.map((repo) => (
+            <div
+              key={repo.id}
+              className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              <h3 className="font-bold text-xl mb-2">
+                {repo.name}
+              </h3>
 
-        {/* ❌ Error */}
-        {error && <p className="text-red-500 text-center">{error}</p>}
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                {repo.description || "No description available"}
+              </p>
 
-        {/* 📦 Repo Cards */}
-        {!loading && !error && (
-          <div className="grid md:grid-cols-3 gap-8">
-            {filteredRepos.map((repo) => (
-              <div
-                key={repo.id}
-                className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:scale-105 transition-all duration-300"
-              >
-                <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-gray-100">
-                  {repo.name}
-                </h3>
+              <p className="text-sm text-amber-500">
+                {repo.language || "Unknown"}
+              </p>
 
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {repo.description || "No description available"}
-                </p>
+              <p className="text-sm text-gray-500 mb-4">
+                ⭐ {repo.stargazers_count}
+              </p>
 
-                <p className="text-sm text-amber-500">
-                  {repo.language || "Unknown"}
-                </p>
+              <div className="flex justify-between items-center mt-4">
+                <a
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-amber-400 text-black font-semibold py-2 px-4 rounded-md hover:bg-amber-500 transition"
+                >
+                  View
+                </a>
 
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  ⭐ {repo.stargazers_count}
-                </p>
-
-                {/* Buttons */}
-                <div className="flex justify-between items-center mt-4">
-                  <a
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-amber-400 text-black font-semibold py-2 px-6 rounded-md hover:bg-amber-500 transition duration-200"
-                  >
-                    View Project
-                  </a>
-
-                  <button
-                    onClick={() => setSelectedRepo(repo)} // 👈 Open modal
-                    className="bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-md hover:bg-gray-400 transition duration-200"
-                  >
-                    See Details
-                  </button>
-                </div>
+                <button
+                  onClick={() => setSelectedRepo(repo)}
+                  className="bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-400 transition"
+                >
+                  Details
+                </button>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* 🌟 Modal */}
+      {/* Modal */}
       {selectedRepo && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white dark:bg-gray-700 rounded-lg p-8 max-w-md w-full relative">
-            <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            <h3 className="text-2xl font-bold mb-4">
               {selectedRepo.name}
             </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-2">
+
+            <p className="mb-2">
               {selectedRepo.description || "No description available"}
             </p>
+
             <p className="text-sm text-amber-500 mb-2">
               Language: {selectedRepo.language || "Unknown"}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+
+            <p className="text-sm mb-4">
               ⭐ {selectedRepo.stargazers_count} stars
             </p>
+
             <a
               href={selectedRepo.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-black text-amber-400 px-4 py-2 rounded-md hover:bg-gray-800 transition font-semibold"
+              className="bg-black text-amber-400 px-4 py-2 rounded-md hover:bg-gray-800 transition"
             >
-              View Project on GitHub
+              GitHub Link
             </a>
 
-            {/* Close button */}
             <button
               onClick={() => setSelectedRepo(null)}
-              className="absolute top-2 right-2 text-gray-700 dark:text-gray-200 font-bold text-lg"
+              className="absolute top-2 right-2 text-lg font-bold"
             >
               ×
             </button>
