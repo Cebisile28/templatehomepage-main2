@@ -168,6 +168,7 @@ export const DynamicData: React.FC = () => {
             <button
               onClick={() => setSelectedRepo(null)}
               className="absolute top-2 right-2 text-lg font-bold"
+              aria-label="Close"
             >
               ×
             </button>

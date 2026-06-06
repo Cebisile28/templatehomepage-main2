@@ -1,34 +1,82 @@
-/**
- * ---------------------------------------------------------
- *  File: /src/components/pages/HomePage.tsx
- *  Description: Main homepage of the Boostify website.
- * ---------------------------------------------------------
- */
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-// 🧩 Page Components (correct relative paths)
+// 🧩 Page Components
 import Hero from "../Hero";
 import Features from "../Features";
 import Footer from "../Footer";
-import { DynamicData } from "../DynamicData"; // named export
+import { DynamicData } from "../DynamicData";
 
 const HomePage: React.FC = () => {
+  const siteUrl = "https://boostify.vercel.app";
+  const imageUrl = `${siteUrl}/og-image.jpg`;
+
   return (
     <>
-      {/* 🌐 SEO META TAGS */}
+      {/* 🌐 SEO + SOCIAL META TAGS */}
       <Helmet>
+        <html lang="en" />
+
         <title>Boostify | Empower Your Digital Presence</title>
+
         <meta
           name="description"
-          content="Boostify helps you grow your business with modern tools, beautiful templates, and scalable digital solutions."
+          content="Boostify helps businesses grow with modern digital solutions, responsive websites, powerful tools, and scalable online experiences."
         />
+
         <meta
           name="keywords"
-          content="Boostify, web templates, digital tools, responsive design, React, TailwindCSS"
+          content="Boostify, web templates, digital tools, responsive design, React, TailwindCSS, digital agency, web development"
         />
+
         <meta name="author" content="Boostify Team" />
+        <meta name="robots" content="index, follow" />
+
+        <link rel="canonical" href={siteUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta
+          property="og:title"
+          content="Boostify | Empower Your Digital Presence"
+        />
+
+        <meta
+          property="og:description"
+          content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:site_name" content="Boostify" />
+
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:secure_url" content={imageUrl} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Boostify - Empower Your Digital Presence"
+        />
+
+        {/* Twitter / X */}
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <meta
+          name="twitter:title"
+          content="Boostify | Empower Your Digital Presence"
+        />
+
+        <meta
+          name="twitter:description"
+          content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
+        />
+
+        <meta name="twitter:image" content={imageUrl} />
+        <meta
+          name="twitter:image:alt"
+          content="Boostify - Empower Your Digital Presence"
+        />
       </Helmet>
 
       <main className="w-full">
@@ -51,7 +99,7 @@ const HomePage: React.FC = () => {
           <DynamicData />
         </section>
 
-        {/* 🚀 Call to Action Section */}
+        {/* 🚀 Call To Action */}
         <section
           id="cta"
           className="py-16 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-center relative overflow-hidden"
@@ -84,6 +132,12 @@ const HomePage: React.FC = () => {
   );
 };
 
+
 export default HomePage;
+
+
+
+
+
 
 
