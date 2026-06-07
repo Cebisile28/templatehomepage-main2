@@ -8,7 +8,7 @@ import Footer from "../Footer";
 import { DynamicData } from "../DynamicData";
 
 const HomePage: React.FC = () => {
-  const siteUrl = "https://boostify.vercel.app";
+  const siteUrl = "https://templatehomepage-main2-kehk.vercel.app";
   const imageUrl = `${siteUrl}/og-image.jpg`;
 
   return (
@@ -73,6 +73,7 @@ const HomePage: React.FC = () => {
         />
 
         <meta name="twitter:image" content={imageUrl} />
+
         <meta
           name="twitter:image:alt"
           content="Boostify - Empower Your Digital Presence"
@@ -132,8 +133,8 @@ const HomePage: React.FC = () => {
   );
 };
 
-
 export default HomePage;
+
 
 
 

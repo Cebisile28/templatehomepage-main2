@@ -35,7 +35,8 @@ export const DynamicData: React.FC = () => {
 
         setRepos(data);
         setFilteredRepos(data);
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         setError("Failed to load repositories.");
       } finally {
         setLoading(false);
