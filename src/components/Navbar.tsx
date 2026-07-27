@@ -1,41 +1,242 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import DarkModeToggle from "./DarkModeToggle";
 import { motion, AnimatePresence } from "framer-motion";
+import type { User } from "@supabase/supabase-js";
 
-// Define the type for navLinks
+import DarkModeToggle from "./DarkModeToggle";
+import { supabase } from "../lib/supabase";
+import { signOut } from "../lib/auth";
+
+
 type NavLink = {
   name: string;
   path: string;
 };
 
-const Navbar: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false); // Explicit boolean type
-  const [scrolled, setScrolled] = useState<boolean>(false); // Explicit boolean type
-  const location = useLocation();
 
-  // Add shadow when scrolling
+const Navbar: React.FC = () => {
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<"buyer" | "seller" | null>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+
+    window.addEventListener(
+      "scroll",
+      handleScroll
+    );
+
+
+    return () =>
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+
   }, []);
 
-  // Close menu on route change
+
+
+
   useEffect(() => {
+
     setMenuOpen(false);
+
   }, [location]);
 
-  // Define navLinks with the correct type
+
+
+
+
+
+  useEffect(() => {
+
+    const loadUser = async () => {
+
+      const {
+        data: {
+          user
+        },
+      } = await supabase.auth.getUser();
+
+
+      setUser(user);
+
+
+      if (!user) {
+
+        setRole(null);
+        return;
+
+      }
+
+
+
+      const {
+        data: profile
+      } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+
+
+      if (profile) {
+
+        setRole(profile.role);
+
+      }
+
+    };
+
+
+
+    loadUser();
+
+
+
+
+    const {
+      data: {
+        subscription
+      },
+    } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+
+
+        const currentUser =
+          session?.user ?? null;
+
+
+
+        setUser(currentUser);
+
+
+
+        if (!currentUser) {
+
+          setRole(null);
+          return;
+
+        }
+
+
+
+        const {
+          data: profile
+        } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", currentUser.id)
+          .single();
+
+
+
+        if (profile) {
+
+          setRole(profile.role);
+
+        }
+
+
+      }
+    );
+
+
+
+    return () =>
+      subscription.unsubscribe();
+
+
+  }, []);
+
+
+
+
+
+
+
+  const handleLogout = async () => {
+
+    const {
+      error
+    } = await signOut();
+
+
+    if (error) {
+
+      alert(error.message);
+      return;
+
+    }
+
+
+    setUser(null);
+    setRole(null);
+
+
+    navigate("/login");
+
+  };
+
+
+
+
+
+
+
   const navLinks: NavLink[] = [
-    { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+
+    {
+      name: "Home",
+      path: "/",
+    },
+
+    {
+      name: "Services",
+      path: "/services",
+    },
+
+    {
+      name: "Marketplace",
+      path: "/marketplace",
+    },
+
+    {
+      name: "About",
+      path: "/about",
+    },
+
+    {
+      name: "Contact",
+      path: "/contact",
+    },
+
   ];
 
+
+
+
+
+
+
   return (
+
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         scrolled
@@ -43,85 +244,308 @@ const Navbar: React.FC = () => {
           : "bg-transparent"
       }`}
     >
+
+
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
+
+
+
         <Link
           to="/"
-          className="text-2xl font-extrabold text-amber-400 hover:text-amber-300 transition-colors duration-300 flex items-center gap-1"
+          className="text-2xl font-extrabold text-amber-400 hover:text-amber-300"
         >
-          <span className="font-bold">⚡</span> Boostify
+          ⚡ Boostify
         </Link>
 
-        {/* Desktop Menu */}
+
+
+
+
         <div className="hidden md:flex items-center gap-8">
+
+
           {navLinks.map((link) => (
+
             <Link
               key={link.name}
               to={link.path}
-              className={`relative text-sm font-medium uppercase tracking-wide transition-colors duration-300 ${
+              className={`relative text-sm uppercase tracking-wide ${
                 location.pathname === link.path
                   ? "text-amber-400"
                   : "text-gray-300 hover:text-amber-300"
               }`}
             >
+
               {link.name}
-              {location.pathname === link.path && (
-                <motion.span
-                  layoutId="underline"
-                  className="absolute left-0 -bottom-1 w-full h-[2px] bg-amber-400"
-                />
-              )}
+
+
             </Link>
+
           ))}
+
+
+
+
+
+
+          {role === "seller" && (
+
+            <Link
+              to="/seller"
+              className="text-sm uppercase text-gray-300 hover:text-amber-300"
+            >
+              Seller Dashboard
+            </Link>
+
+          )}
+
+
+
+
+
+
+          {user ? (
+
+            <>
+
+              <span className="text-sm text-gray-300 hidden lg:block">
+
+                Hi,
+
+                <span className="text-amber-400 font-semibold ml-1">
+                  {user.email}
+                </span>
+
+              </span>
+
+
+
+
+              <button
+                onClick={handleLogout}
+                className="text-sm uppercase text-red-400 hover:text-red-300 transition"
+              >
+                Logout
+              </button>
+
+
+            </>
+
+
+          ) : (
+
+            <>
+
+              <Link
+                to="/login"
+                className="text-sm uppercase text-gray-300 hover:text-amber-300"
+              >
+                Login
+              </Link>
+
+
+              <Link
+                to="/register"
+                className="text-sm uppercase text-amber-400 hover:text-amber-300"
+              >
+                Register
+              </Link>
+
+
+            </>
+
+          )}
+
+
+
+
           <DarkModeToggle />
+
         </div>
 
-        {/* Mobile Menu Button */}
+
+
+
+
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle Menu"
-          className="md:hidden text-gray-300 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 rounded p-1"
+          className="md:hidden text-gray-300"
         >
+
           {menuOpen ? (
+
             <XMarkIcon className="h-7 w-7" />
+
           ) : (
+
             <Bars3Icon className="h-7 w-7" />
+
           )}
+
         </button>
+
+
       </div>
 
-      {/* Mobile Menu */}
+
+
+
+
+
       <AnimatePresence>
+
         {menuOpen && (
+
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-black/95 backdrop-blur-md px-6 pb-6"
+
+            initial={{
+              height: 0,
+              opacity: 0
+            }}
+
+            animate={{
+              height: "auto",
+              opacity: 1
+            }}
+
+            exit={{
+              height: 0,
+              opacity: 0
+            }}
+
+            className="md:hidden bg-black/95 px-6 pb-6"
+
           >
+
+
             <div className="flex flex-col gap-4 mt-4">
+
+
+
               {navLinks.map((link) => (
+
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-sm uppercase tracking-wide ${
-                    location.pathname === link.path
-                      ? "text-amber-400"
-                      : "text-gray-300 hover:text-amber-300"
-                  }`}
+                  className="text-sm uppercase text-gray-300"
                 >
                   {link.name}
                 </Link>
+
               ))}
+
+
+
+
+
+              {role === "seller" && (
+
+                <Link
+                  to="/seller"
+                  className="text-sm uppercase text-gray-300"
+                >
+                  Seller Dashboard
+                </Link>
+
+              )}
+
+
+
+
+
+
+              {user ? (
+
+                <>
+
+                  <div className="bg-gray-800 rounded-lg border border-gray-700 p-3">
+
+                    <p className="text-xs uppercase text-gray-400">
+                      Signed In
+                    </p>
+
+
+                    <p className="text-sm text-amber-400 font-medium break-all">
+                      {user.email}
+                    </p>
+
+
+                    {role && (
+
+                      <p className="text-xs text-gray-400 mt-1">
+
+                        Role:
+
+                        <span className="text-amber-400 capitalize ml-1">
+                          {role}
+                        </span>
+
+                      </p>
+
+                    )}
+
+                  </div>
+
+
+
+
+                  <button
+                    onClick={handleLogout}
+                    className="text-sm uppercase text-red-400 text-left"
+                  >
+                    Logout
+                  </button>
+
+
+                </>
+
+
+              ) : (
+
+                <>
+
+                  <Link
+                    to="/login"
+                    className="text-sm uppercase text-gray-300"
+                  >
+                    Login
+                  </Link>
+
+
+                  <Link
+                    to="/register"
+                    className="text-sm uppercase text-amber-400"
+                  >
+                    Register
+                  </Link>
+
+
+                </>
+
+              )}
+
+
+
               <DarkModeToggle />
+
             </div>
+
+
           </motion.div>
+
         )}
+
       </AnimatePresence>
+
+
+
     </nav>
+
   );
+
 };
+
+
 
 export default Navbar;
 

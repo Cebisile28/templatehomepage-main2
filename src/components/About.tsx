@@ -5,7 +5,7 @@ const About: React.FC = () => {
   return (
     <section
       id="about"
-      className="py-20 px-6 md:px-12 bg-white dark:bg-gray-900 transition-colors duration-300"
+      className="bg-white px-6 py-20 transition-colors duration-300 dark:bg-gray-900 md:px-12"
     >
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         {/* Left: Image Section */}

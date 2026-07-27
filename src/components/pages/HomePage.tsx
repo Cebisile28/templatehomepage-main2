@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet-async";
 // 🧩 Page Components
 import Hero from "../Hero";
 import Features from "../Features";
-import Footer from "../Footer";
 import { DynamicData } from "../DynamicData";
 
 const HomePage: React.FC = () => {
@@ -126,9 +125,6 @@ const HomePage: React.FC = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
         </section>
       </main>
-
-      {/* 📌 Footer */}
-      <Footer />
     </>
   );
 };

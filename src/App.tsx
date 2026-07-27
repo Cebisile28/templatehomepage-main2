@@ -1,52 +1,141 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
-// Layout
+
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
-// Pages
+
 import HomePage from "./components/pages/HomePage";
 import AboutPage from "./components/pages/AboutPage";
-import ServicePage from "./components/pages/ServicePage";
 import ContactPage from "./components/pages/ContactPage";
+import LoginPage from "./components/pages/LoginPage";
+import RegisterPage from "./components/pages/RegisterPage";
+import MarketplacePage from "./components/pages/MarketplacePage";
+import PricingPage from "./components/pages/PricingPage";
+import ProductPage from "./components/pages/ProductPage";
+import ServicePage from "./components/pages/ServicePage";
 
-// Optional: 404 Page
-const NotFound: React.FC = () => {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white text-center px-4">
-      <h1 className="text-6xl font-bold text-amber-400 mb-4">404</h1>
-      <p className="text-lg mb-6">Oops! The page you are looking for does not exist.</p>
-      <a
-        href="/"
-        className="bg-amber-400 hover:bg-amber-500 text-black font-semibold px-6 py-3 rounded transition"
-      >
-        Go Back Home
-      </a>
-    </div>
-  );
-};
 
-const App: React.FC = () => {
+import SellerRoutes from "./components/seller/SellerRoutes";
+
+
+const PublicLayout = () => {
+
   return (
-    <Router>
-      {/* Global Navbar */}
+
+    <div className="
+      min-h-screen
+      bg-white
+      dark:bg-gray-900
+      text-gray-900
+      dark:text-white
+    ">
+
       <Navbar />
 
-      {/* Add padding-top to prevent navbar overlap */}
-      <div className="pt-20">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/services" element={<ServicePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+      <main>
 
-          {/* 404 Catch All */}
-          <Route path="*" element={<NotFound />} />
+        <Routes>
+
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+
+          <Route
+            path="/about"
+            element={<AboutPage />}
+          />
+
+          <Route
+            path="/contact"
+            element={<ContactPage />}
+          />
+
+          <Route
+            path="/services"
+            element={<ServicePage />}
+          />
+
+          <Route
+            path="/marketplace"
+            element={<MarketplacePage />}
+          />
+
+          <Route
+            path="/pricing"
+            element={<PricingPage />}
+          />
+
+          <Route
+            path="/product/:id"
+            element={<ProductPage />}
+          />
+
+          <Route
+            path="/login"
+            element={<LoginPage />}
+          />
+
+          <Route
+            path="/register"
+            element={<RegisterPage />}
+          />
+
         </Routes>
-      </div>
-    </Router>
+
+      </main>
+
+
+      <Footer />
+
+    </div>
+
   );
+
 };
+
+
+
+const App: React.FC = () => {
+
+  return (
+
+    <BrowserRouter>
+
+      <Routes>
+
+
+        {/* SELLER PORTAL */}
+
+        <Route
+          path="/seller/*"
+          element={<SellerRoutes />}
+        />
+
+
+        {/* PUBLIC WEBSITE */}
+
+        <Route
+          path="*"
+          element={<PublicLayout />}
+        />
+
+
+      </Routes>
+
+
+    </BrowserRouter>
+
+  );
+
+};
+
 
 export default App;
 

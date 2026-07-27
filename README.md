@@ -37,6 +37,17 @@ yarn dev
 
 4. Open your browser and navigate to `http://localhost:5173` (or the URL shown in your terminal)
 
+### Environment variables
+
+This project expects Supabase keys to be provided via Vite environment variables. Create a `.env` file in the project root with the following values (do not commit this file):
+
+```
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-public-key
+```
+
+Use the project *anon* (public) key for `VITE_SUPABASE_ANON_KEY` — do not use the service role key in the browser.
+
 ## Building for Production
 
 To build the project for production:
