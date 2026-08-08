@@ -1,3 +1,4 @@
+// src/components/ProtectedRoute.tsx
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
@@ -5,36 +6,26 @@ import type { User } from "@supabase/supabase-js";
 
 type Props = {
   children: React.ReactNode;
+  requiredRole?: "buyer" | "seller"; // optional role requirement
 };
 
-const ProtectedRoute: React.FC<Props> = ({ children }) => {
+const ProtectedRoute: React.FC<Props> = ({ children, requiredRole }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<"buyer" | "seller" | null>(null);
 
   useEffect(() => {
     const checkUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      console.log("🔵 User:", user);
-
+      const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
 
       if (user) {
-        const { data: profile, error } = await supabase
+        const { data: profile } = await supabase
           .from("profiles")
           .select("role")
           .eq("id", user.id)
           .single();
-
-        console.log("🟢 Profile:", profile);
-        console.log("🔴 Error:", error);
-
-        if (!error && profile) {
-          setRole(profile.role);
-        }
+        setRole(profile?.role ?? null);
       }
 
       setLoading(false);
@@ -42,61 +33,43 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
 
     checkUser();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
 
-      console.log("🟡 Auth State User:", currentUser);
+        if (currentUser) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", currentUser.id)
+            .single();
+          setRole(profile?.role ?? null);
+        } else {
+          setRole(null);
+        }
 
-      setUser(currentUser);
-
-      if (currentUser) {
-        const { data: profile, error } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", currentUser.id)
-          .single();
-
-        console.log("🟢 Auth Profile:", profile);
-        console.log("🔴 Auth Error:", error);
-
-        setRole(profile?.role ?? null);
-      } else {
-        setRole(null);
+        setLoading(false);
       }
+    );
 
-      setLoading(false);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
-  console.log("🟣 Loading:", loading);
-  console.log("🟣 User State:", user);
-  console.log("🟣 Role State:", role);
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-        Loading...
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
   if (!user) {
-    console.log("➡️ Redirecting to /login");
     return <Navigate to="/login" replace />;
   }
 
-  if (role !== "seller") {
-    console.log("➡️ Redirecting to /marketplace because role is:", role);
-    return <Navigate to="/marketplace" replace />;
+  if (requiredRole && role !== requiredRole) {
+    // Redirect buyers to marketplace, sellers to dashboard
+    return role === "buyer"
+      ? <Navigate to="/marketplace" replace />
+      : <Navigate to="/seller/dashboard" replace />;
   }
-
-  console.log("✅ Seller authenticated. Rendering dashboard.");
 
   return <>{children}</>;
 };

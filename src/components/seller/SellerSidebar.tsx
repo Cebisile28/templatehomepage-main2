@@ -11,7 +11,15 @@ import {
   CurrencyDollarIcon,
   Cog6ToothIcon,
   StarIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
+
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
 
 
 const menuGroups = [
@@ -21,7 +29,7 @@ const menuGroups = [
     items: [
       {
         name: "Dashboard",
-        path: "/seller",
+        path: "/seller/dashboard",
         icon: Squares2X2Icon,
       },
     ],
@@ -36,6 +44,7 @@ const menuGroups = [
         path: "/seller/products",
         icon: CubeIcon,
       },
+
       {
         name: "Create Product",
         path: "/seller/products/create",
@@ -53,6 +62,7 @@ const menuGroups = [
         path: "/seller/orders",
         icon: ShoppingBagIcon,
       },
+
       {
         name: "Customers",
         path: "/seller/customers",
@@ -70,6 +80,7 @@ const menuGroups = [
         path: "/seller/analytics",
         icon: ChartBarIcon,
       },
+
       {
         name: "Reviews",
         path: "/seller/reviews",
@@ -106,193 +117,290 @@ const menuGroups = [
 
 
 
-const SellerSidebar: React.FC = () => {
+const SellerSidebar: React.FC<Props> = ({
+  open,
+  onClose,
+}) => {
 
 
   return (
 
-    <aside
-      className="
-        hidden
-        md:flex
-        w-72
-        min-h-screen
-        flex-col
-        bg-gray-900
-        text-white
-        border-r
-        border-gray-800
-      "
-    >
+    <>
 
 
-      {/* BRAND */}
+      {/* MOBILE OVERLAY */}
 
-      <div
-        className="
-          p-8
-          border-b
+      {open && (
+
+        <div
+          onClick={onClose}
+          className="
+            fixed
+            inset-0
+            bg-black/50
+            z-40
+            md:hidden
+          "
+        />
+
+      )}
+
+
+
+
+      <aside
+
+        className={`
+          fixed
+          top-0
+          left-0
+          h-screen
+
+          w-64
+
+          bg-gray-950
+          text-white
+
+          border-r
           border-gray-800
-        "
+
+          z-50
+
+          flex
+          flex-col
+
+          transition-transform
+          duration-300
+
+          ${
+            open
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }
+
+          md:translate-x-0
+        `}
+
       >
 
-        <h1
+
+
+        {/* BRAND */}
+
+
+        <div
+
           className="
-            text-3xl
-            font-bold
-            text-amber-400
+            px-6
+            py-7
+
+            border-b
+            border-gray-800
           "
+
         >
-          Boostify
-        </h1>
 
 
-        <p
-          className="
-            text-sm
-            text-gray-400
-            mt-2
-          "
-        >
-          Seller Marketplace
-        </p>
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+            "
+          >
 
 
-      </div>
+            <div>
+
+              <h1
+                className="
+                  text-2xl
+                  font-extrabold
+                  text-amber-400
+                "
+              >
+                Boostify
+              </h1>
 
 
+              <p
+                className="
+                  text-xs
+                  text-gray-500
+                  mt-1
+                "
+              >
+                Seller Marketplace
+              </p>
 
-      {/* NAVIGATION */}
-
-      <nav
-        className="
-          flex-1
-          px-5
-          py-6
-          space-y-7
-        "
-      >
-
-        {menuGroups.map((group) => (
-
-          <div key={group.title}>
-
-
-            <p
-              className="
-                text-xs
-                uppercase
-                tracking-wide
-                text-gray-500
-                mb-3
-                px-3
-              "
-            >
-              {group.title}
-            </p>
-
-
-
-            <div
-              className="
-                space-y-2
-              "
-            >
-
-              {group.items.map((item) => {
-
-                const Icon = item.icon;
-
-
-                return (
-
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    end={item.path === "/seller"}
-                    className={({isActive}) =>
-                      `
-                      flex
-                      items-center
-                      gap-3
-                      px-4
-                      py-3
-                      rounded-xl
-                      transition
-                      ${
-                        isActive
-                        ?
-                        "bg-amber-400 text-black font-semibold"
-                        :
-                        "text-gray-300 hover:bg-gray-800 hover:text-white"
-                      }
-                      `
-                    }
-                  >
-
-                    <Icon
-                      className="w-5 h-5"
-                    />
-
-
-                    <span>
-                      {item.name}
-                    </span>
-
-
-                  </NavLink>
-
-                );
-
-              })}
 
             </div>
 
 
+
+
+            <button
+
+              onClick={onClose}
+
+              className="
+                md:hidden
+                text-gray-400
+                hover:text-white
+              "
+
+            >
+
+              <XMarkIcon className="w-6 h-6"/>
+
+            </button>
+
+
           </div>
 
-        ))}
+
+        </div>
 
 
-      </nav>
 
 
 
-      {/* FOOTER */}
+        {/* MENU */}
 
-      <div
-        className="
-          p-5
-          border-t
-          border-gray-800
-        "
-      >
 
-        <p
+        <nav
+
           className="
-            text-xs
-            text-gray-500
+            flex-1
+
+            overflow-y-auto
+
+            px-4
+            py-5
+
+            space-y-6
+
           "
+
         >
-          Boostify Marketplace
-        </p>
 
 
-        <p
+          {menuGroups.map((group)=>(
+
+
+            <div key={group.title}>
+
+
+              <p
+
+                className="
+                  text-[11px]
+                  uppercase
+                  tracking-widest
+                  text-gray-500
+                  mb-2
+                  px-3
+                "
+
+              >
+
+                {group.title}
+
+              </p>
+
+
+
+
+              <div className="space-y-1">
+
+
+                {group.items.map((item) => {
+
+                  const Icon = item.icon;
+
+                  return (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      end={item.path === "/seller"}
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                          isActive
+                            ? "bg-amber-400 text-black font-semibold shadow-lg"
+                            : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                        }`
+                      }
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span>{item.name}</span>
+                    </NavLink>
+                  );
+                })}
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+          ))}
+
+
+        </nav>
+
+
+
+
+
+        {/* FOOTER */}
+
+
+        <div
+
           className="
-            text-xs
-            text-gray-600
-            mt-1
+            px-6
+            py-5
+
+            border-t
+            border-gray-800
           "
+
         >
-          Seller Portal v1.0
-        </p>
 
 
-      </div>
+          <p
+            className="
+              text-xs
+              text-gray-500
+            "
+          >
+            Boostify Marketplace
+          </p>
 
 
-    </aside>
+          <p
+            className="
+              text-xs
+              text-gray-600
+              mt-1
+            "
+          >
+            Seller Portal v1.0
+          </p>
+
+
+        </div>
+
+
+
+      </aside>
+
+
+    </>
 
   );
 

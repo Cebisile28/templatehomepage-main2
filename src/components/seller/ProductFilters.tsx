@@ -2,7 +2,7 @@ import React from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 type ProductFiltersProps = {
-  search: string;
+  search: string;         
   setSearch: (value: string) => void;
 
   category: string;

@@ -1,7 +1,7 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import SellerSidebar from "./SellerSidebar";
+import SellerLayout from "./SellerLayout";
 
 import SellerDashboard from "./SellerDashboard";
 import Products from "./Products";
@@ -12,123 +12,77 @@ import Analytics from "./Analytics";
 import Reviews from "./Reviews";
 import Earnings from "./Earnings";
 import Settings from "./Settings";
-
+import SellerProfile from "./SellerProfile";
 
 const SellerRoutes: React.FC = () => {
 
   return (
 
-    <div className="
-      min-h-screen
-      flex
-      bg-gray-100
-      dark:bg-gray-950
-    ">
+    <SellerLayout>
 
+      <Routes>
 
-      {/* SELLER SIDEBAR */}
+        <Route
+          path="/"
+          element={<Navigate to="/seller/dashboard" replace />}
+        />
 
-      <SellerSidebar />
+        <Route
+          path="/dashboard"
+          element={<SellerDashboard />}
+        />
 
+        <Route
+          path="/profile"
+          element={<SellerProfile />}
+        />
 
+        <Route
+          path="/products"
+          element={<Products />}
+        />
 
-      {/* SELLER CONTENT */}
+        <Route
+          path="/products/create"
+          element={<CreateProduct />}
+        />
 
-      <main
-        className="
-          flex-1
-          p-6
-          md:p-10
-          overflow-x-hidden
-        "
-      >
+        <Route
+          path="/orders"
+          element={<Orders />}
+        />
 
-        <Routes>
+        <Route
+          path="/customers"
+          element={<Customers />}
+        />
 
+        <Route
+          path="/analytics"
+          element={<Analytics />}
+        />
 
-          {/* DASHBOARD */}
+        <Route
+          path="/reviews"
+          element={<Reviews />}
+        />
 
-          <Route
-            path="/"
-            element={<SellerDashboard />}
-          />
+        <Route
+          path="/earnings"
+          element={<Earnings />}
+        />
 
+        <Route
+          path="/settings"
+          element={<Settings />}
+        />
 
+      </Routes>
 
-          {/* PRODUCTS */}
-
-          <Route
-            path="/products"
-            element={<Products />}
-          />
-
-
-          <Route
-            path="/products/create"
-            element={<CreateProduct />}
-          />
-
-
-
-          {/* SALES */}
-
-          <Route
-            path="/orders"
-            element={<Orders />}
-          />
-
-
-          <Route
-            path="/customers"
-            element={<Customers />}
-          />
-
-
-
-          {/* GROWTH */}
-
-          <Route
-            path="/analytics"
-            element={<Analytics />}
-          />
-
-
-          <Route
-            path="/reviews"
-            element={<Reviews />}
-          />
-
-
-
-          {/* FINANCE */}
-
-          <Route
-            path="/earnings"
-            element={<Earnings />}
-          />
-
-
-
-          {/* SETTINGS */}
-
-          <Route
-            path="/settings"
-            element={<Settings />}
-          />
-
-
-
-        </Routes>
-
-
-      </main>
-
-
-    </div>
+    </SellerLayout>
 
   );
 
 };
-
 
 export default SellerRoutes;

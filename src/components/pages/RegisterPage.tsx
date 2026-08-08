@@ -1,126 +1,131 @@
+// src/components/pages/RegisterPage.tsx
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { signUp } from "../../lib/auth";
+import { useNavigate } from "react-router-dom";
+import auth from "../../lib/auth";
+import { supabase } from "../../lib/supabase";
 
 const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"buyer" | "seller">("buyer");
+  const [businessName, setBusinessName] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!fullName.trim() || !email.trim() || !password.trim()) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
     setLoading(true);
+    setError(null);
 
-    const { error } = await signUp(
-      fullName.trim(),
-      email.trim(),
-      password,
-      role
-    );
+    const result = await auth.signUp(fullName, email, password, role);
 
-    setLoading(false);
-
-    if (error) {
-      toast.error(error.message);
+    if (result.error) {
+      setError(result.error.message);
+      setLoading(false);
       return;
     }
 
-    toast.success("🎉 Welcome to Boostify!\n\nYour account has been created successfully.");
+    // If seller, save extra business info in profiles
+    if (role === "seller" && result.data?.user) {
+      await supabase.from("profiles").upsert({
+        id: result.data.user.id,
+        business_name: businessName,
+      });
+    }
 
-    navigate("/login");
+    // Redirect based on role
+    if (role === "buyer") {
+      navigate("/marketplace");
+    } else {
+      navigate("/seller/dashboard");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
-        onSubmit={handleRegister}
-        className="w-full max-w-md space-y-4 rounded-lg bg-gray-800 p-8 shadow-xl"
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded shadow-md w-full max-w-md"
       >
-        <div>
-          <h1 className="text-2xl font-bold text-amber-400">
-            Create Account
-          </h1>
+        <h2 className="text-2xl font-bold mb-6">Create Account</h2>
 
-          <p className="mt-2 text-sm text-gray-400">
-            Join as a buyer or seller and start exploring the marketplace.
-          </p>
-        </div>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <input
-          className="w-full rounded bg-gray-700 p-3 outline-none ring-0"
-          placeholder="Full Name"
           type="text"
-          autoComplete="name"
+          placeholder="Full Name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+          required
         />
 
         <input
-          className="w-full rounded bg-gray-700 p-3 outline-none ring-0"
-          placeholder="Email"
           type="email"
-          autoComplete="email"
+          placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+          required
         />
 
         <input
-          className="w-full rounded bg-gray-700 p-3 outline-none ring-0"
-          placeholder="Password"
           type="password"
-          autoComplete="new-password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+          required
         />
 
-        <label className="block">
-          <span className="mb-2 block text-sm text-gray-300">
-            I want to join as
-          </span>
+        {/* Role toggle */}
+        <div className="flex gap-4 mb-4">
+          <label>
+            <input
+              type="radio"
+              value="buyer"
+              checked={role === "buyer"}
+              onChange={() => setRole("buyer")}
+            />
+            Buyer
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="seller"
+              checked={role === "seller"}
+              onChange={() => setRole("seller")}
+            />
+            Seller
+          </label>
+        </div>
 
-          <select
-            className="w-full rounded bg-gray-700 p-3"
-            value={role}
-            onChange={(e) =>
-              setRole(e.target.value as "buyer" | "seller")
-            }
-          >
-            <option value="buyer">Buyer</option>
-            <option value="seller">Seller</option>
-          </select>
-        </label>
+        {/* Extra seller fields */}
+        {role === "seller" && (
+          <input
+            type="text"
+            placeholder="Business Name"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+            required
+          />
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-amber-400 py-3 font-bold text-black transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          {loading ? "Creating account..." : "Create Account"}
+          {loading ? "Creating account..." : "Register"}
         </button>
-
-        <p className="text-center text-sm text-gray-400">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="font-medium text-amber-400 hover:underline"
-          >
-            Login
-          </Link>
-        </p>
       </form>
     </div>
   );
 };
 
 export default RegisterPage;
+

@@ -1,173 +1,78 @@
+// src/components/pages/LoginPage.tsx
 import React, { useState } from "react";
-import { signIn } from "../../lib/auth";
-import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import auth from "../../lib/auth";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-    if (!email.trim() || !password.trim()) {
-      toast.error("Please enter your email and password.");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const result = await auth.signIn(email, password);
+
+    if (result.error) {
+      setError(result.error.message);
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    if (result.data?.user) {
+      // ✅ Fetch role from profiles
+      const role = await auth.getUserRole(result.data.user.id);
 
-    try {
-      const { data, error } = await signIn(
-        email.trim(),
-        password
-      );
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      if (!data?.user) {
-        toast.error("Login failed. Please try again.");
-        return;
-      }
-
-      const {
-        data: profile,
-        error: profileError,
-      } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileError || !profile) {
-        console.error("Profile error:", profileError);
-
-        await supabase.auth.signOut();
-
-        toast.error(
-          "Your account profile no longer exists. Please register again."
-        );
-
-        navigate("/register");
-        return;
-      }
-
-      toast.success("👋 Welcome back to Boostify!");
-
-      if (profile.role === "seller") {
-        navigate("/seller");
-      } else {
+      if (role === "buyer") {
         navigate("/marketplace");
+      } else if (role === "seller") {
+        navigate("/seller/dashboard");
+      } else {
+        // fallback if role missing
+        navigate("/");
       }
-
-    } catch (error) {
-      console.error("Login error:", error);
-
-      toast.error(
-        "Something went wrong while logging in."
-      );
-
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div
-      className="
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        bg-gray-900
-        text-white
-        px-4
-      "
-    >
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
-        onSubmit={handleLogin}
-        className="
-          bg-gray-800
-          p-8
-          rounded-lg
-          w-full
-          max-w-md
-          space-y-4
-          shadow-xl
-        "
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded shadow-md w-full max-w-md"
       >
-        <div>
-          <h1
-            className="
-              text-2xl
-              font-bold
-              text-amber-400
-            "
-          >
-            Login
-          </h1>
+        <h2 className="text-2xl font-bold mb-6">Login</h2>
 
-          <p
-            className="
-              text-sm
-              text-gray-400
-              mt-2
-            "
-          >
-            Login to access your marketplace account.
-          </p>
-        </div>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <input
-          className="
-            w-full
-            p-3
-            rounded
-            bg-gray-700
-            outline-none
-          "
-          placeholder="Email"
           type="email"
-          autoComplete="email"
+          placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+          required
         />
 
         <input
-          className="
-            w-full
-            p-3
-            rounded
-            bg-gray-700
-            outline-none
-          "
-          placeholder="Password"
           type="password"
-          autoComplete="current-password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+          required
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="
-            w-full
-            bg-amber-400
-            text-black
-            py-3
-            rounded
-            font-bold
-            hover:bg-amber-300
-            disabled:opacity-50
-          "
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
           {loading ? "Logging in..." : "Login"}
         </button>

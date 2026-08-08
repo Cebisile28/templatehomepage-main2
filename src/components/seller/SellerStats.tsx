@@ -1,3 +1,4 @@
+// src/components/seller/SellerStats.tsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import {
@@ -24,27 +25,41 @@ const SellerStats: React.FC = () => {
 
   useEffect(() => {
     const loadStats = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) return;
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) return;
 
       // Total products
-      const { count: totalProducts } = await supabase
+      const { count: totalProducts, error: totalError } = await supabase
         .from("products")
         .select("*", { count: "exact", head: true })
-        .eq("seller_id", user.id);
+        .eq("seller_id", userData.user.id);
+      if (totalError) console.error(totalError.message);
 
       // Active products
-      const { count: activeProducts } = await supabase
+      const { count: activeProducts, error: activeError } = await supabase
         .from("products")
         .select("*", { count: "exact", head: true })
-        .eq("seller_id", user.id)
+        .eq("seller_id", userData.user.id)
         .eq("status", "active");
+      if (activeError) console.error(activeError.message);
 
-      // Temporary values until Orders are built
-      const earnings = 0;
+      // Earnings: sum of order_items.price * quantity for this seller’s products
+      const { data: earningsData, error: earningsError } = await supabase
+        .from("order_items")
+        .select("quantity, price, products!inner(seller_id)")
+        .eq("products.seller_id", userData.user.id);
+
+      let earnings = 0;
+      if (earningsError) {
+        console.error(earningsError.message);
+      } else if (earningsData) {
+        earnings = earningsData.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+      }
+
+      // Downloads placeholder until you add digital products
       const downloads = 0;
 
       setStats({
@@ -89,7 +104,6 @@ const SellerStats: React.FC = () => {
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 mb-10">
       {cards.map((card) => {
         const Icon = card.icon;
-
         return (
           <div
             key={card.title}
@@ -100,12 +114,10 @@ const SellerStats: React.FC = () => {
                 <p className="text-gray-500 dark:text-gray-400 text-sm">
                   {card.title}
                 </p>
-
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                   {card.value}
                 </h2>
               </div>
-
               <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3">
                 <Icon className={`w-7 h-7 ${card.color}`} />
               </div>
@@ -118,3 +130,4 @@ const SellerStats: React.FC = () => {
 };
 
 export default SellerStats;
+
