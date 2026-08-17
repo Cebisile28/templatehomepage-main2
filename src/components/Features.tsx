@@ -1,4 +1,3 @@
-```tsx
 import React, { useState } from "react";
 import {
   DevicePhoneMobileIcon,
@@ -310,5 +309,5 @@ const Features: React.FC = () => {
 };
 
 export default Features;
-```
+ 
 
