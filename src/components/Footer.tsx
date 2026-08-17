@@ -1,20 +1,24 @@
+```tsx
+import React from "react";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
-    <footer className="bg-gradient-to-b from-black via-gray-900 to-black text-gray-400 relative overflow-hidden">
+    <footer className="relative overflow-hidden bg-gradient-to-b from-black via-gray-900 to-black text-gray-400">
       {/* Decorative Top Border */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 animate-pulse" />
+      <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 animate-pulse" />
 
-      <div className="container mx-auto px-6 py-14 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      {/* Footer Content */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+
           {/* Brand */}
-          <div className="space-y-4">
-            <h3 className="text-3xl font-extrabold text-amber-400">
+          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+            <h3 className="text-2xl font-extrabold text-amber-400 sm:text-3xl">
               ⚡ Boostify
             </h3>
 
-            <p className="text-gray-400 leading-relaxed">
+            <p className="max-w-md text-sm leading-7 text-gray-400">
               Empowering businesses, entrepreneurs, and creators through a
               modern digital marketplace built for growth.
             </p>
@@ -22,15 +26,15 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-4 border-l-4 border-amber-400 pl-3">
+            <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Quick Links
             </h4>
 
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               <li>
                 <Link
                   to="/"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Home
                 </Link>
@@ -39,7 +43,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/about"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   About
                 </Link>
@@ -48,7 +52,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/services"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Services
                 </Link>
@@ -57,7 +61,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/marketplace"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Marketplace
                 </Link>
@@ -66,7 +70,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/contact"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Contact
                 </Link>
@@ -76,15 +80,15 @@ const Footer = () => {
 
           {/* Resources */}
           <div>
-            <h4 className="text-white font-bold mb-4 border-l-4 border-amber-400 pl-3">
+            <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Resources
             </h4>
 
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               <li>
                 <Link
                   to="/pricing"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Pricing
                 </Link>
@@ -93,7 +97,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/marketplace"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Browse Products
                 </Link>
@@ -102,7 +106,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/contact"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Customer Support
                 </Link>
@@ -111,7 +115,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/about"
-                  className="block hover:text-amber-400 transition-all duration-300 hover:translate-x-2"
+                  className="block rounded-md py-2 transition-all duration-300 hover:translate-x-1 hover:text-amber-400"
                 >
                   Learn More
                 </Link>
@@ -120,43 +124,89 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="text-white font-bold mb-4 border-l-4 border-amber-400 pl-3">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Contact
             </h4>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
+
+              {/* Email */}
               <a
                 href="mailto:boostifymarketplace@gmail.com"
-                className="flex items-center gap-3 text-gray-400 hover:text-amber-400 transition-all duration-300 hover:translate-x-1"
+                className="
+                  flex
+                  min-w-0
+                  items-start
+                  gap-3
+                  rounded-lg
+                  py-2
+                  text-sm
+                  text-gray-400
+                  transition-all
+                  duration-300
+                  hover:text-amber-400
+                "
               >
-                <span className="text-xl">📧</span>
-                <span className="hover:underline">
+                <span className="shrink-0 text-lg">
+                  📧
+                </span>
+
+                <span className="min-w-0 break-all hover:underline">
                   boostifymarketplace@gmail.com
                 </span>
               </a>
 
+              {/* Phone */}
               <a
                 href="tel:+27682531912"
-                className="flex items-center gap-3 text-gray-400 hover:text-amber-400 transition-all duration-300 hover:translate-x-1"
+                className="
+                  flex
+                  items-center
+                  gap-3
+                  rounded-lg
+                  py-2
+                  text-sm
+                  text-gray-400
+                  transition-all
+                  duration-300
+                  hover:text-amber-400
+                "
               >
-                <span className="text-xl">📞</span>
+                <span className="shrink-0 text-lg">
+                  📞
+                </span>
+
                 <span className="hover:underline">
                   +27 68 253 1912
                 </span>
               </a>
 
-              <div className="flex items-center gap-3 text-gray-400">
-                <span className="text-xl">📍</span>
-                <span>Durban, South Africa</span>
+              {/* Location */}
+              <div className="flex items-start gap-3 py-2 text-sm text-gray-400">
+                <span className="shrink-0 text-lg">
+                  📍
+                </span>
+
+                <span>
+                  Durban, South Africa
+                </span>
               </div>
+
             </div>
           </div>
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="border-t border-gray-800 mt-12 pt-6 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Boostify Marketplace. All Rights Reserved.
+        {/* Copyright */}
+        <div className="mt-10 border-t border-gray-800 pt-6 text-center sm:mt-12">
+          <p className="text-xs leading-6 text-gray-500 sm:text-sm">
+            © {new Date().getFullYear()} Boostify Marketplace.
+
+            <span className="block sm:inline">
+              {" "}
+              All Rights Reserved.
+            </span>
+          </p>
         </div>
       </div>
     </footer>
@@ -164,3 +214,4 @@ const Footer = () => {
 };
 
 export default Footer;
+```

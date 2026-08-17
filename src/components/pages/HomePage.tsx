@@ -1,7 +1,8 @@
+```tsx
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-// 🧩 Page Components
+// Page Components
 import Hero from "../Hero";
 import Features from "../Features";
 import { DynamicData } from "../DynamicData";
@@ -12,11 +13,13 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      {/* 🌐 SEO + SOCIAL META TAGS */}
+      {/* SEO + SOCIAL META TAGS */}
       <Helmet>
         <html lang="en" />
 
-        <title>Boostify | Empower Your Digital Presence</title>
+        <title>
+          Boostify | Empower Your Digital Presence
+        </title>
 
         <meta
           name="description"
@@ -28,10 +31,20 @@ const HomePage: React.FC = () => {
           content="Boostify, web templates, digital tools, responsive design, React, TailwindCSS, digital agency, web development"
         />
 
-        <meta name="author" content="Boostify Team" />
-        <meta name="robots" content="index, follow" />
+        <meta
+          name="author"
+          content="Boostify Team"
+        />
 
-        <link rel="canonical" href={siteUrl} />
+        <meta
+          name="robots"
+          content="index, follow"
+        />
+
+        <link
+          rel="canonical"
+          href={siteUrl}
+        />
 
         {/* Open Graph / Facebook */}
         <meta
@@ -44,22 +57,56 @@ const HomePage: React.FC = () => {
           content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
         />
 
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:site_name" content="Boostify" />
+        <meta
+          property="og:type"
+          content="website"
+        />
 
-        <meta property="og:image" content={imageUrl} />
-        <meta property="og:image:secure_url" content={imageUrl} />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:url"
+          content={siteUrl}
+        />
+
+        <meta
+          property="og:site_name"
+          content="Boostify"
+        />
+
+        <meta
+          property="og:image"
+          content={imageUrl}
+        />
+
+        <meta
+          property="og:image:secure_url"
+          content={imageUrl}
+        />
+
+        <meta
+          property="og:image:type"
+          content="image/jpeg"
+        />
+
+        <meta
+          property="og:image:width"
+          content="1200"
+        />
+
+        <meta
+          property="og:image:height"
+          content="630"
+        />
+
         <meta
           property="og:image:alt"
           content="Boostify - Empower Your Digital Presence"
         />
 
         {/* Twitter / X */}
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:card"
+          content="summary_large_image"
+        />
 
         <meta
           name="twitter:title"
@@ -71,65 +118,217 @@ const HomePage: React.FC = () => {
           content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
         />
 
-        <meta name="twitter:image" content={imageUrl} />
+        <meta
+          name="twitter:image"
+          content={imageUrl}
+        />
 
         <meta
           name="twitter:image:alt"
           content="Boostify - Empower Your Digital Presence"
         />
+
+        {/* Mobile browser theme color */}
+        <meta
+          name="theme-color"
+          content="#000000"
+        />
+
+        {/* Prevent automatic telephone/email detection styling */}
+        <meta
+          name="format-detection"
+          content="telephone=no"
+        />
       </Helmet>
 
-      <main className="w-full">
-        {/* 🎯 Hero Section */}
-        <Hero />
+      <main className="w-full min-w-0 overflow-x-hidden">
 
-        {/* ⭐ Features Section */}
+        {/* HERO */}
+        <section className="w-full min-w-0">
+          <Hero />
+        </section>
+
+        {/* FEATURES */}
         <section
           id="features"
-          className="scroll-mt-20 bg-gray-100 dark:bg-gray-900 transition-colors duration-500"
+          className="
+            w-full
+            min-w-0
+            scroll-mt-20
+            overflow-hidden
+            bg-gray-100
+            transition-colors
+            duration-500
+            dark:bg-gray-900
+          "
         >
           <Features />
         </section>
 
-        {/* 🔄 Dynamic API Products Section */}
+        {/* PRODUCTS */}
         <section
           id="products"
-          className="scroll-mt-20 bg-white dark:bg-gray-800 transition-colors duration-500"
+          className="
+            w-full
+            min-w-0
+            scroll-mt-20
+            overflow-hidden
+            bg-white
+            transition-colors
+            duration-500
+            dark:bg-gray-800
+          "
         >
           <DynamicData />
         </section>
 
-        {/* 🚀 Call To Action */}
+        {/* CALL TO ACTION */}
         <section
           id="cta"
-          className="py-16 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-center relative overflow-hidden"
+          className="
+            relative
+            w-full
+            overflow-hidden
+            bg-gradient-to-br
+            from-amber-400
+            via-yellow-400
+            to-amber-500
+            px-4
+            py-14
+            text-center
+            text-black
+            sm:px-6
+            sm:py-16
+            lg:px-8
+            lg:py-20
+          "
         >
-          <div className="container mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          {/* CTA Content */}
+          <div
+            className="
+              relative
+              z-10
+              mx-auto
+              w-full
+              max-w-3xl
+            "
+          >
+            <h2
+              className="
+                text-2xl
+                font-bold
+                leading-tight
+                sm:text-3xl
+                md:text-4xl
+                lg:text-5xl
+              "
+            >
               Ready to take your business to the next level?
             </h2>
 
-            <p className="text-lg mb-8 max-w-2xl mx-auto">
-              Boostify offers modern, scalable solutions for creators,
-              entrepreneurs, and startups looking to make an impact online.
+            <p
+              className="
+                mx-auto
+                mt-4
+                max-w-2xl
+                text-base
+                leading-7
+                text-black/80
+                sm:mt-5
+                sm:text-lg
+                sm:leading-8
+              "
+            >
+              Boostify offers modern, scalable solutions for
+              creators, entrepreneurs, and startups looking to make
+              an impact online.
             </p>
 
-            <a
-              href="/contact"
-              className="inline-block bg-black hover:bg-gray-800 text-amber-400 font-semibold py-3 px-8 rounded-md shadow-md transition-all duration-300 hover:scale-105"
-            >
-              Get in Touch
-            </a>
+            {/* CTA Button */}
+            <div className="mt-7 sm:mt-8">
+              <a
+                href="/contact"
+                className="
+                  inline-flex
+                  min-h-[48px]
+                  w-full
+                  max-w-xs
+                  items-center
+                  justify-center
+                  rounded-lg
+                  bg-black
+                  px-6
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-amber-400
+                  shadow-lg
+                  transition-all
+                  duration-300
+                  hover:bg-gray-800
+                  hover:shadow-xl
+                  sm:w-auto
+                  sm:px-8
+                  sm:text-base
+                  sm:hover:scale-105
+                "
+              >
+                Get in Touch
+              </a>
+            </div>
           </div>
 
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
+          {/* Decorative Background */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.18),transparent_70%)]
+            "
+          />
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -right-20
+              -top-20
+              h-56
+              w-56
+              rounded-full
+              bg-white/10
+              blur-3xl
+              sm:h-72
+              sm:w-72
+            "
+          />
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -bottom-24
+              -left-20
+              h-64
+              w-64
+              rounded-full
+              bg-white/10
+              blur-3xl
+              sm:h-80
+              sm:w-80
+            "
+          />
         </section>
+
       </main>
     </>
   );
 };
 
 export default HomePage;
+```
+
 
 
 
