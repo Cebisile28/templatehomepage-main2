@@ -1,25 +1,20 @@
-```tsx
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-// Page Components
 import Hero from "../Hero";
 import Features from "../Features";
 import { DynamicData } from "../DynamicData";
 
 const HomePage: React.FC = () => {
   const siteUrl = "https://templatehomepage-main2-kehk.vercel.app";
-  const imageUrl = `${siteUrl}/og-image.jpg`;
+  const imageUrl = siteUrl + "/og-image.jpg";
 
   return (
     <>
-      {/* SEO + SOCIAL META TAGS */}
       <Helmet>
         <html lang="en" />
 
-        <title>
-          Boostify | Empower Your Digital Presence
-        </title>
+        <title>Boostify | Empower Your Digital Presence</title>
 
         <meta
           name="description"
@@ -31,22 +26,13 @@ const HomePage: React.FC = () => {
           content="Boostify, web templates, digital tools, responsive design, React, TailwindCSS, digital agency, web development"
         />
 
-        <meta
-          name="author"
-          content="Boostify Team"
-        />
+        <meta name="author" content="Boostify Team" />
 
-        <meta
-          name="robots"
-          content="index, follow"
-        />
+        <meta name="robots" content="index, follow" />
 
-        <link
-          rel="canonical"
-          href={siteUrl}
-        />
+        <link rel="canonical" href={siteUrl} />
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph */}
         <meta
           property="og:title"
           content="Boostify | Empower Your Digital Presence"
@@ -57,45 +43,21 @@ const HomePage: React.FC = () => {
           content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
         />
 
-        <meta
-          property="og:type"
-          content="website"
-        />
+        <meta property="og:type" content="website" />
 
-        <meta
-          property="og:url"
-          content={siteUrl}
-        />
+        <meta property="og:url" content={siteUrl} />
 
-        <meta
-          property="og:site_name"
-          content="Boostify"
-        />
+        <meta property="og:site_name" content="Boostify" />
 
-        <meta
-          property="og:image"
-          content={imageUrl}
-        />
+        <meta property="og:image" content={imageUrl} />
 
-        <meta
-          property="og:image:secure_url"
-          content={imageUrl}
-        />
+        <meta property="og:image:secure_url" content={imageUrl} />
 
-        <meta
-          property="og:image:type"
-          content="image/jpeg"
-        />
+        <meta property="og:image:type" content="image/jpeg" />
 
-        <meta
-          property="og:image:width"
-          content="1200"
-        />
+        <meta property="og:image:width" content="1200" />
 
-        <meta
-          property="og:image:height"
-          content="630"
-        />
+        <meta property="og:image:height" content="630" />
 
         <meta
           property="og:image:alt"
@@ -118,23 +80,16 @@ const HomePage: React.FC = () => {
           content="Modern digital solutions for creators, entrepreneurs, startups, and businesses."
         />
 
-        <meta
-          name="twitter:image"
-          content={imageUrl}
-        />
+        <meta name="twitter:image" content={imageUrl} />
 
         <meta
           name="twitter:image:alt"
           content="Boostify - Empower Your Digital Presence"
         />
 
-        {/* Mobile browser theme color */}
-        <meta
-          name="theme-color"
-          content="#000000"
-        />
+        {/* Browser theme */}
+        <meta name="theme-color" content="#000000" />
 
-        {/* Prevent automatic telephone/email detection styling */}
         <meta
           name="format-detection"
           content="telephone=no"
@@ -320,14 +275,12 @@ const HomePage: React.FC = () => {
             "
           />
         </section>
-
       </main>
     </>
   );
 };
 
 export default HomePage;
-```
 
 
 

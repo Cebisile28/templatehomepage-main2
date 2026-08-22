@@ -1,4 +1,3 @@
-```tsx
 import React from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
@@ -115,7 +114,8 @@ const Hero: React.FC = () => {
               sm:text-sm
             "
           >
-            ⚡ Grow Smarter with Boostify
+            <span aria-hidden="true">⚡</span>
+            <span className="ml-1">Grow Smarter with Boostify</span>
           </div>
 
           {/* Headline */}
@@ -133,7 +133,8 @@ const Hero: React.FC = () => {
           >
             Supercharge Your Business with{" "}
             <span className="text-amber-400">
-              ⚡ Boostify
+              <span aria-hidden="true">⚡ </span>
+              Boostify
             </span>
           </h1>
 
@@ -150,6 +151,7 @@ const Hero: React.FC = () => {
               sm:leading-8
               lg:mx-0
               lg:text-xl
+              dark:text-gray-300
             "
           >
             Modern digital tools and powerful templates designed
@@ -198,7 +200,10 @@ const Hero: React.FC = () => {
             >
               Get Started
 
-              <ArrowRightIcon className="ml-2 h-5 w-5" />
+              <ArrowRightIcon
+                aria-hidden="true"
+                className="ml-2 h-5 w-5"
+              />
             </a>
 
             <a
@@ -307,5 +312,4 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
-```
 

@@ -1,4 +1,3 @@
-```tsx
 // src/components/seller/SellerRoutes.tsx
 
 import React from "react";
@@ -44,6 +43,7 @@ const SellerRoutes: React.FC = () => {
           element={<Products />}
         />
 
+        {/* Create Product */}
         <Route
           path="/products/create"
           element={<CreateProduct />}
@@ -96,4 +96,4 @@ const SellerRoutes: React.FC = () => {
 };
 
 export default SellerRoutes;
-```
+
