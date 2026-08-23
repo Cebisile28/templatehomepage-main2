@@ -39,7 +39,7 @@ const SellerProducts: React.FC = () => {
         query = query.ilike("name", `%${search}%`);
       }
 
-      const { data, error, count } = await query
+      const { data, error } = await query
         .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
       if (error) {

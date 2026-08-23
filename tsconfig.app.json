@@ -1,56 +1,49 @@
 {
-  "compilerOptions": {
-    /* === Language and Target === */
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "useDefineForClassFields": true,
-    /* === Module and Bundler Setup === */
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+"compilerOptions": {
+"target": "ES2020",
+"lib": ["ES2020", "DOM", "DOM.Iterable"],
+"useDefineForClassFields": true,
 
-    /* === Type Checking and Linting === */
-    "strict": true,
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+"module": "ESNext",
+"moduleResolution": "bundler",
+"allowImportingTsExtensions": true,
+"isolatedModules": true,
+"noEmit": true,
+"jsx": "react-jsx",
 
-    /* === Interop and File Handling === */
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
 
-    /* === Path Aliases (for cleaner imports) === */
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
-    "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/pages/*": ["src/pages/*"],
-      "@/assets/*": ["src/assets/*"],
-      "@/utils/*": ["src/utils/*"]
-    },
+"strict": true,
+"skipLibCheck": true,
+"noUnusedLocals": true,
+"noUnusedParameters": true,
+"noFallthroughCasesInSwitch": true,
 
-    /* === Type Declarations for Vite === */
-    "types": ["vite/client"]
-  },
 
-  /* === Include and Exclude Rules === */
-  "include": [
-    "src",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/components/**/*",
-    "src/pages/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build"
-  ]
+"esModuleInterop": true,
+"resolveJsonModule": true,
+"forceConsistentCasingInFileNames": true,
+
+
+"paths": {
+  "@/*": ["./src/*"],
+  "@/components/*": ["./src/components/*"],
+  "@/pages/*": ["./src/pages/*"],
+  "@/assets/*": ["./src/assets/*"],
+  "@/utils/*": ["./src/utils/*"]
+},
+
+
+"types": ["vite/client"]
+
+},
+
+"include": [
+"src"
+],
+
+"exclude": [
+"node_modules",
+"dist",
+"build"
+]
 }
-

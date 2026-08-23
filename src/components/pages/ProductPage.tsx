@@ -14,10 +14,17 @@ type Product = {
   delivery_time: string;
 };
 
+type SellerProfile = {
+  full_name: string | null;
+  verified: boolean | null;
+  business_name: string | null;
+  location: string | null;
+};
+
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
-  const [seller, setSeller] = useState<any>(null);
+  const [seller, setSeller] = useState<SellerProfile | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {

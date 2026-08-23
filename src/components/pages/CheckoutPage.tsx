@@ -14,6 +14,10 @@ type CartItem = {
   };
 };
 
+type CartQueryRow = Omit<CartItem, "products"> & {
+  products: CartItem["products"] | CartItem["products"][] | null;
+};
+
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -35,13 +39,16 @@ const CheckoutPage: React.FC = () => {
         console.error("Error fetching cart:", error.message);
       } else {
         setCartItems(
-          (data as any[])
-            .map((item) => ({
-              id: item.id,
-              quantity: item.quantity,
-              products: item.products,
-            }))
-            .filter((item) => item.products && item.products.name && item.products.price)
+          (data as CartQueryRow[])
+            .map((item): CartItem | null => {
+              const product = Array.isArray(item.products)
+                ? item.products[0]
+                : item.products;
+              return product?.name && product.price
+                ? { id: item.id, quantity: item.quantity, products: product }
+                : null;
+            })
+            .filter((item): item is CartItem => item !== null)
         );
       }
     };

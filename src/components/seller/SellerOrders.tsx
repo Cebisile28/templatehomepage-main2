@@ -19,6 +19,14 @@ type SellerOrderItem = {
   };
 };
 
+type SellerOrderQueryRow = {
+  id: string;
+  quantity: number;
+  price: number;
+  products: { name: string; image_url?: string; seller_id?: string } | { name: string; image_url?: string; seller_id?: string }[] | null;
+  orders: { id: string; status: string; total_amount: number; created_at: string; user_id: string } | { id: string; status: string; total_amount: number; created_at: string; user_id: string }[] | null;
+};
+
 const SellerOrders: React.FC = () => {
   const [orders, setOrders] = useState<SellerOrderItem[]>([]);
 
@@ -44,7 +52,7 @@ const SellerOrders: React.FC = () => {
         console.error("Error fetching seller orders:", error.message);
       } else {
         setOrders(
-          (data || []).map((item: any) => {
+          (data || []).map((item: SellerOrderQueryRow) => {
             const product = Array.isArray(item.products)
               ? item.products[0]
               : item.products;

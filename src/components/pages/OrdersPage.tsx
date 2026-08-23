@@ -20,6 +20,14 @@ type Order = {
   order_items: OrderItem[];
 };
 
+type OrderQueryItem = Omit<OrderItem, "products"> & {
+  products: OrderItem["products"] | OrderItem["products"][] | null;
+};
+
+type OrderQueryRow = Omit<Order, "order_items"> & {
+  order_items: OrderQueryItem[] | null;
+};
+
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -49,17 +57,26 @@ const OrdersPage: React.FC = () => {
         console.error("Error fetching orders:", error.message);
       } else {
         setOrders(
-          (data as any[]).map((order) => ({
+          (data as OrderQueryRow[]).map((order) => ({
             id: order.id,
             status: order.status,
             total_amount: order.total_amount,
             created_at: order.created_at,
-            order_items: (order.order_items || []).map((item: any) => ({
-              id: item.id,
-              quantity: item.quantity,
-              price: item.price,
-              products: item.products,
-            })),
+            order_items: (order.order_items || [])
+              .map((item): OrderItem | null => {
+                const product = Array.isArray(item.products)
+                  ? item.products[0]
+                  : item.products;
+                return product
+                  ? {
+                      id: item.id,
+                      quantity: item.quantity,
+                      price: item.price,
+                      products: product,
+                    }
+                  : null;
+              })
+              .filter((item): item is OrderItem => item !== null),
           }))
         );
       }
