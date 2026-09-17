@@ -9,10 +9,21 @@ const Footer: React.FC = () => {
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
 
+          {/* Brand */}
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
-            <h3 className="text-2xl font-extrabold text-amber-400 sm:text-3xl">
-              ⚡ Boostify
-            </h3>
+            <Link
+              to="/"
+              aria-label="Boostify home"
+              className="inline-flex items-center text-2xl font-extrabold text-amber-400 transition-colors hover:text-amber-300 sm:text-3xl"
+            >
+              <span aria-hidden="true">
+                ⚡
+              </span>
+
+              <span className="ml-1">
+                Boostify
+              </span>
+            </Link>
 
             <p className="max-w-md text-sm leading-7 text-gray-400">
               Empowering businesses, entrepreneurs, and creators through a
@@ -20,6 +31,7 @@ const Footer: React.FC = () => {
             </p>
           </div>
 
+          {/* Quick Links */}
           <div>
             <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Quick Links
@@ -73,6 +85,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
+          {/* Resources */}
           <div>
             <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Resources
@@ -117,13 +130,13 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
+          {/* Contact */}
           <div className="sm:col-span-2 lg:col-span-1">
             <h4 className="mb-4 border-l-4 border-amber-400 pl-3 font-bold text-white">
               Contact
             </h4>
 
             <div className="space-y-3">
-
               <a
                 href="mailto:boostifymarketplace@gmail.com"
                 className="flex min-w-0 items-start gap-3 rounded-lg py-2 text-sm text-gray-400 transition-all duration-300 hover:text-amber-400"
@@ -151,11 +164,11 @@ const Footer: React.FC = () => {
 
                 <span>Durban, South Africa</span>
               </div>
-
             </div>
           </div>
         </div>
 
+        {/* Copyright */}
         <div className="mt-10 border-t border-gray-800 pt-6 text-center sm:mt-12">
           <p className="text-xs leading-6 text-gray-500 sm:text-sm">
             © {new Date().getFullYear()} Boostify Marketplace.

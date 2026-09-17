@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   DevicePhoneMobileIcon,
-  CodeBracketIcon,
-  WrenchScrewdriverIcon,
-  ArrowRightIcon,
+  ShoppingBagIcon,
+  UserGroupIcon,
+  ShieldCheckIcon,
+  ArrowTrendingUpIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/outline";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface Feature {
   title: string;
@@ -12,297 +15,234 @@ interface Feature {
   icon: React.ElementType;
 }
 
+const features: Feature[] = [
+  {
+    title: "Useful Digital Products",
+    description:
+      "Discover templates, resources, tools, and other digital products designed to help you work smarter and achieve more.",
+    icon: ShoppingBagIcon,
+  },
+  {
+    title: "Built for Creators",
+    description:
+      "Turn your knowledge, creativity, and digital work into products that people can discover and purchase.",
+    icon: SparklesIcon,
+  },
+  {
+    title: "Simple Selling",
+    description:
+      "Create your seller account and build your digital storefront without unnecessary complexity.",
+    icon: UserGroupIcon,
+  },
+  {
+    title: "Mobile Friendly",
+    description:
+      "Browse, shop, and manage your digital business from phones, tablets, and desktop devices.",
+    icon: DevicePhoneMobileIcon,
+  },
+  {
+    title: "A Growing Marketplace",
+    description:
+      "Connect buyers looking for useful digital products with creators who have something valuable to offer.",
+    icon: ArrowTrendingUpIcon,
+  },
+  {
+    title: "Designed for Trust",
+    description:
+      "A clean marketplace experience helps buyers discover products confidently and helps sellers present their work professionally.",
+    icon: ShieldCheckIcon,
+  },
+];
+
 const Features: React.FC = () => {
-  const [features, setFeatures] = useState<Feature[]>([
-    {
-      title: "Responsive Design",
-      description:
-        "Deliver a consistent experience on all devices — from mobile to desktop — with a design that adapts seamlessly.",
-      icon: DevicePhoneMobileIcon,
-    },
-    {
-      title: "Modern Stack",
-      description:
-        "Built with React, TypeScript, and Tailwind CSS for high performance, scalability, and easy customization.",
-      icon: CodeBracketIcon,
-    },
-    {
-      title: "Easy Customization",
-      description:
-        "Modular and developer-friendly components that let you personalize your site without breaking structure.",
-      icon: WrenchScrewdriverIcon,
-    },
-  ]);
-
-  // Dynamically add a new feature
-  const addFeature = () => {
-    const newFeature: Feature = {
-      title: `Feature ${features.length + 1}`,
-      description:
-        "This feature was dynamically added — imagine loading this from your database or API.",
-      icon: ArrowRightIcon,
-    };
-
-    setFeatures((currentFeatures) => [
-      ...currentFeatures,
-      newFeature,
-    ]);
-  };
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section
       id="features"
+      aria-labelledby="features-heading"
       className="
         w-full
         overflow-hidden
-        bg-gray-50
+        bg-slate-50
         px-4
-        py-14
+        py-16
         transition-colors
         duration-300
-        dark:bg-gray-900
+        dark:bg-slate-900
         sm:px-6
-        sm:py-16
-        md:px-10
-        lg:px-8
-        lg:py-20
+        sm:py-20
+        md:px-8
+        lg:px-10
+        lg:py-24
       "
     >
-      <div className="mx-auto w-full max-w-7xl text-center">
+      <div className="mx-auto w-full max-w-7xl">
+        {/* Heading */}
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-400">
+            Why Boostify
+          </p>
 
-        {/* Section Heading */}
-        <div className="mx-auto max-w-3xl">
           <h2
+            id="features-heading"
             className="
+              mt-3
               text-3xl
               font-bold
               leading-tight
-              text-gray-900
-              opacity-0
-              animate-[fadeIn_1s_ease-in-out_forwards]
+              tracking-tight
+              text-slate-900
               dark:text-white
               sm:text-4xl
+              md:text-5xl
             "
-            style={{
-              animationDelay: "0.2s",
-            }}
           >
-            Why Choose{" "}
-            <span className="text-amber-400">
-              Boostify
-            </span>
-            ?
+            One marketplace. More opportunities.
           </h2>
 
           <p
             className="
               mx-auto
-              mt-4
+              mt-5
               max-w-2xl
               text-base
               leading-7
-              text-gray-600
-              opacity-0
-              animate-[fadeIn_1s_ease-in-out_forwards]
-              dark:text-gray-300
+              text-slate-600
+              dark:text-slate-300
               sm:text-lg
               sm:leading-8
             "
-            style={{
-              animationDelay: "0.5s",
-            }}
           >
-            Designed for modern creators, entrepreneurs, and
-            developers — Boostify brings efficiency, beauty, and
-            innovation together in one platform.
+            Boostify is designed to make digital commerce easier
+            for both sides of the marketplace — people looking for
+            useful products and creators ready to sell their work.
           </p>
         </div>
 
-        {/* Feature Cards */}
+        {/* Feature cards */}
         <div
           className="
             mt-10
             grid
             grid-cols-1
-            gap-6
+            gap-5
             sm:mt-12
             sm:grid-cols-2
-            sm:gap-7
+            sm:gap-6
             lg:grid-cols-3
-            lg:gap-8
+            lg:gap-7
           "
         >
           {features.map((feature, index) => {
             const Icon = feature.icon;
 
             return (
-              <div
-                key={`${feature.title}-${index}`}
+              <motion.article
+                key={feature.title}
+                initial={
+                  shouldReduceMotion
+                    ? false
+                    : {
+                        opacity: 0,
+                        y: 20,
+                      }
+                }
+                whileInView={
+                  shouldReduceMotion
+                    ? { opacity: 1 }
+                    : {
+                        opacity: 1,
+                        y: 0,
+                      }
+                }
+                viewport={{
+                  once: true,
+                  amount: 0.15,
+                }}
+                transition={
+                  shouldReduceMotion
+                    ? { duration: 0 }
+                    : {
+                        duration: 0.45,
+                        delay: index * 0.05,
+                        ease: "easeOut",
+                      }
+                }
                 className="
                   group
                   flex
                   h-full
                   flex-col
-                  rounded-xl
+                  rounded-2xl
+                  border
+                  border-slate-200
                   border-t-4
-                  border-amber-400
+                  border-t-amber-400
                   bg-white
                   p-6
-                  shadow-md
-                  opacity-0
-                  transition-all
-                  duration-500
-                  animate-[slideUp_1s_ease-in-out_forwards]
-                  hover:-translate-y-1
-                  hover:shadow-xl
-                  dark:bg-gray-800
+                  shadow-sm
+                  transition-shadow
+                  duration-200
+                  hover:shadow-lg
+                  dark:border-slate-800
+                  dark:bg-slate-950
                   sm:p-7
-                  lg:p-8
-                  lg:hover:-translate-y-2
                 "
-                style={{
-                  animationDelay: `${index * 0.2 + 0.5}s`,
-                }}
               >
-                {/* Icon */}
-                <div className="mb-5 flex justify-center">
-                  <div
+                <div
+                  className="
+                    mb-5
+                    flex
+                    h-12
+                    w-12
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-amber-100
+                    dark:bg-amber-400/10
+                  "
+                >
+                  <Icon
+                    aria-hidden="true"
                     className="
-                      rounded-full
-                      bg-amber-100
-                      p-3
-                      transition-transform
-                      duration-300
-                      group-hover:scale-110
-                      dark:bg-amber-500/20
+                      h-6
+                      w-6
+                      text-amber-600
+                      dark:text-amber-400
                     "
-                  >
-                    <Icon className="h-8 w-8 text-amber-500" />
-                  </div>
+                  />
                 </div>
 
-                {/* Title */}
                 <h3
                   className="
-                    mb-3
                     text-xl
-                    font-semibold
+                    font-bold
                     leading-tight
-                    text-gray-900
+                    text-slate-900
                     dark:text-white
                   "
                 >
                   {feature.title}
                 </h3>
 
-                {/* Description */}
                 <p
                   className="
+                    mt-3
                     flex-1
                     text-sm
                     leading-7
-                    text-gray-600
-                    dark:text-gray-300
+                    text-slate-600
+                    dark:text-slate-300
                     sm:text-base
                   "
                 >
                   {feature.description}
                 </p>
-              </div>
+              </motion.article>
             );
           })}
         </div>
-
-        {/* Add Feature Button */}
-        <div
-          className="
-            mt-10
-            opacity-0
-            animate-[bounceIn_1s_ease-in-out_forwards]
-            sm:mt-12
-          "
-          style={{
-            animationDelay: `${features.length * 0.2 + 1}s`,
-          }}
-        >
-          <button
-            type="button"
-            onClick={addFeature}
-            className="
-              inline-flex
-              min-h-[48px]
-              w-full
-              max-w-xs
-              items-center
-              justify-center
-              rounded-lg
-              bg-amber-400
-              px-6
-              py-3
-              text-sm
-              font-semibold
-              text-black
-              shadow-md
-              transition-all
-              duration-300
-              hover:bg-amber-500
-              hover:shadow-lg
-              sm:w-auto
-              sm:px-8
-              sm:text-base
-              sm:hover:scale-105
-            "
-          >
-            + Add Feature
-          </button>
-        </div>
-
-        {/* Services CTA */}
-        <div
-          className="
-            mt-14
-            opacity-0
-            animate-[fadeIn_1s_ease-in-out_forwards]
-            sm:mt-16
-            lg:mt-20
-          "
-          style={{
-            animationDelay: "1.5s",
-          }}
-        >
-          <a
-            href="/services"
-            className="
-              inline-flex
-              min-h-[50px]
-              w-full
-              max-w-sm
-              items-center
-              justify-center
-              rounded-lg
-              bg-black
-              px-6
-              py-3
-              text-sm
-              font-bold
-              text-white
-              shadow-lg
-              transition-all
-              duration-300
-              hover:bg-amber-500
-              hover:text-white
-              dark:bg-amber-400
-              dark:text-black
-              dark:hover:bg-amber-500
-              sm:w-auto
-              sm:px-10
-              sm:text-base
-            "
-          >
-            Explore Our Services
-          </a>
-        </div>
-
       </div>
     </section>
   );

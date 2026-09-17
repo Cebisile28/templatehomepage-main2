@@ -1,23 +1,27 @@
 import React from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Hero: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section
+      aria-labelledby="hero-heading"
       className="
         relative
-        min-h-screen
         w-full
         overflow-hidden
         bg-white
-        text-gray-900
-        dark:bg-gray-900
+        text-slate-900
+        dark:bg-slate-950
         dark:text-white
       "
     >
-      {/* Background Glow Effects */}
+      {/* Background decorations */}
       <div
+        aria-hidden="true"
         className="
           pointer-events-none
           absolute
@@ -28,7 +32,6 @@ const Hero: React.FC = () => {
           rounded-full
           bg-amber-400/20
           blur-3xl
-          animate-pulse
           sm:h-80
           sm:w-80
           lg:h-96
@@ -37,6 +40,7 @@ const Hero: React.FC = () => {
       />
 
       <div
+        aria-hidden="true"
         className="
           pointer-events-none
           absolute
@@ -45,9 +49,8 @@ const Hero: React.FC = () => {
           h-64
           w-64
           rounded-full
-          bg-purple-500/20
+          bg-purple-500/10
           blur-3xl
-          animate-pulse
           sm:h-80
           sm:w-80
           lg:h-96
@@ -55,7 +58,7 @@ const Hero: React.FC = () => {
         "
       />
 
-      {/* Main Container */}
+      {/* Main content */}
       <div
         className="
           relative
@@ -65,28 +68,43 @@ const Hero: React.FC = () => {
           max-w-7xl
           flex-col
           items-center
+          gap-10
           px-4
           pb-16
-          pt-28
+          pt-24
+          sm:gap-12
           sm:px-6
           sm:pb-20
-          sm:pt-32
+          sm:pt-28
           md:px-10
-          lg:min-h-screen
+          lg:min-h-[calc(100vh-5rem)]
           lg:flex-row
           lg:justify-between
+          lg:gap-12
           lg:px-8
           lg:pb-20
-          lg:pt-28
+          lg:pt-24
         "
       >
-        {/* Left Content */}
+        {/* Left content */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7 }}
+          initial={
+            shouldReduceMotion
+              ? false
+              : { opacity: 0, x: -30 }
+          }
+          animate={
+            shouldReduceMotion
+              ? undefined
+              : { opacity: 1, x: 0 }
+          }
+          transition={{
+            duration: shouldReduceMotion ? 0 : 0.6,
+            ease: "easeOut",
+          }}
           className="
+            relative
+            z-10
             w-full
             max-w-2xl
             text-center
@@ -94,51 +112,51 @@ const Hero: React.FC = () => {
             lg:text-left
           "
         >
-          {/* Small Label */}
-          <div
+          {/* Brand statement */}
+          <p
             className="
-              mb-5
-              inline-flex
-              items-center
-              rounded-full
-              border
-              border-amber-400/30
-              bg-amber-400/10
-              px-4
-              py-2
-              text-xs
-              font-semibold
+              text-sm
+              font-bold
               uppercase
-              tracking-wider
-              text-amber-500
-              sm:text-sm
+              tracking-[0.18em]
+              text-amber-600
+              dark:text-amber-400
             "
           >
-            <span aria-hidden="true">⚡</span>
-            <span className="ml-1">Grow Smarter with Boostify</span>
-          </div>
+            Built for Value. Driven by Opportunity.
+          </p>
 
-          {/* Headline */}
+          {/* Main heading */}
           <h1
+            id="hero-heading"
             className="
-              text-3xl
+              mt-4
+              text-4xl
               font-extrabold
-              leading-[1.15]
+              leading-[1.08]
               tracking-tight
-              sm:text-4xl
-              md:text-5xl
+              sm:text-5xl
+              md:text-6xl
               lg:text-6xl
               xl:text-7xl
             "
           >
-            Supercharge Your Business with{" "}
+            Discover.
+            <br />
+
             <span className="text-amber-400">
-              <span aria-hidden="true">⚡ </span>
-              Boostify
+              Create.
+            </span>{" "}
+            Connect.
+            <br />
+
+            Grow with{" "}
+            <span className="text-amber-400">
+              Boostify.
             </span>
           </h1>
 
-          {/* Subtext */}
+          {/* Description */}
           <p
             className="
               mx-auto
@@ -146,20 +164,21 @@ const Hero: React.FC = () => {
               max-w-xl
               text-base
               leading-7
-              text-gray-600
+              text-slate-600
               sm:text-lg
               sm:leading-8
               lg:mx-0
               lg:text-xl
-              dark:text-gray-300
+              dark:text-slate-300
             "
           >
-            Modern digital tools and powerful templates designed
-            to help creators, startups, and businesses scale faster
-            and smarter.
+            Boostify is a digital marketplace built for people
+            who create, sell, discover, and use digital products.
+            Find useful products, build your storefront, connect
+            with opportunities, and grow your digital journey.
           </p>
 
-          {/* Buttons */}
+          {/* CTA buttons */}
           <div
             className="
               mt-8
@@ -172,95 +191,162 @@ const Hero: React.FC = () => {
               lg:justify-start
             "
           >
-            <a
-              href="/services"
+            <Link
+              to="/marketplace"
               className="
                 inline-flex
                 min-h-[50px]
                 w-full
                 items-center
                 justify-center
-                rounded-lg
+                rounded-xl
                 bg-amber-400
                 px-6
                 py-3
                 text-sm
-                font-semibold
-                text-black
+                font-bold
+                text-slate-950
                 shadow-lg
                 transition-all
-                duration-300
+                duration-200
                 hover:bg-amber-500
                 hover:shadow-xl
+                focus:outline-none
+                focus:ring-4
+                focus:ring-amber-400/30
                 sm:w-auto
                 sm:px-8
                 sm:text-base
-                sm:hover:scale-105
               "
             >
-              Get Started
+              Explore Marketplace
 
               <ArrowRightIcon
                 aria-hidden="true"
                 className="ml-2 h-5 w-5"
               />
-            </a>
+            </Link>
 
-            <a
-              href="/about"
+            <Link
+              to="/register"
               className="
                 inline-flex
                 min-h-[50px]
                 w-full
                 items-center
                 justify-center
-                rounded-lg
+                rounded-xl
                 border
-                border-gray-300
+                border-slate-300
+                bg-white
                 px-6
                 py-3
                 text-sm
-                font-semibold
-                text-gray-900
+                font-bold
+                text-slate-900
                 transition-all
-                duration-300
+                duration-200
                 hover:border-amber-400
-                hover:text-amber-500
-                dark:border-gray-600
-                dark:text-white
+                hover:text-amber-600
+                focus:outline-none
+                focus:ring-4
+                focus:ring-amber-400/20
                 sm:w-auto
                 sm:px-8
                 sm:text-base
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-white
+                dark:hover:border-amber-400
+                dark:hover:text-amber-400
               "
             >
-              Learn More
-            </a>
+              Start Selling
+            </Link>
+          </div>
+
+          {/* Brand journey */}
+          <div
+            className="
+              mt-8
+              flex
+              flex-wrap
+              items-center
+              justify-center
+              gap-x-4
+              gap-y-2
+              text-xs
+              font-bold
+              uppercase
+              tracking-wide
+              text-slate-500
+              sm:text-sm
+              lg:justify-start
+              dark:text-slate-400
+            "
+          >
+            <span>Discover</span>
+
+            <span
+              aria-hidden="true"
+              className="text-amber-400"
+            >
+              •
+            </span>
+
+            <span>Create</span>
+
+            <span
+              aria-hidden="true"
+              className="text-amber-400"
+            >
+              •
+            </span>
+
+            <span>Connect</span>
+
+            <span
+              aria-hidden="true"
+              className="text-amber-400"
+            >
+              •
+            </span>
+
+            <span>Grow</span>
           </div>
         </motion.div>
 
-        {/* Right Image */}
+        {/* Right image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
+          initial={
+            shouldReduceMotion
+              ? false
+              : { opacity: 0, scale: 0.96 }
+          }
+          animate={
+            shouldReduceMotion
+              ? undefined
+              : { opacity: 1, scale: 1 }
+          }
           transition={{
-            duration: 0.8,
-            delay: 0.15,
+            duration: shouldReduceMotion ? 0 : 0.7,
+            delay: shouldReduceMotion ? 0 : 0.1,
+            ease: "easeOut",
           }}
           className="
-            mt-12
+            relative
+            z-10
             flex
             w-full
             justify-center
-            sm:mt-16
-            lg:mt-0
             lg:w-1/2
-            lg:pl-8
+            lg:justify-end
           "
         >
           <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-xl">
-            {/* Image Glow */}
+            {/* Image glow */}
             <div
+              aria-hidden="true"
               className="
                 absolute
                 inset-4
@@ -272,9 +358,12 @@ const Hero: React.FC = () => {
 
             <img
               src="/optimized/images_website-image.webp"
-              alt="Boostify Digital Growth"
+              alt="Boostify digital marketplace"
+              width={900}
+              height={700}
               loading="eager"
               fetchPriority="high"
+              decoding="async"
               className="
                 relative
                 block
@@ -283,28 +372,26 @@ const Hero: React.FC = () => {
                 rounded-2xl
                 object-contain
                 shadow-2xl
-                transition-all
-                duration-500
-                hover:shadow-amber-400/30
               "
             />
           </div>
         </motion.div>
       </div>
 
-      {/* Bottom Gradient Divider */}
+      {/* Bottom divider */}
       <div
+        aria-hidden="true"
         className="
           pointer-events-none
           absolute
           bottom-0
           left-0
-          h-20
+          h-16
           w-full
           bg-gradient-to-t
           from-white
           to-transparent
-          dark:from-gray-900
+          dark:from-slate-950
         "
       />
     </section>
@@ -312,4 +399,3 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
-

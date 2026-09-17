@@ -199,9 +199,10 @@ const Navbar: React.FC = () => {
           lg:px-8
         "
       >
-        {/* Logo */}
+        {/* Yellow Boostify Logo */}
         <Link
           to="/"
+          aria-label="Boostify home"
           className="
             flex
             shrink-0
@@ -214,8 +215,16 @@ const Navbar: React.FC = () => {
             sm:text-2xl
           "
         >
-          <span>⚡</span>
-          <span className="ml-1">Boostify</span>
+          <span
+            aria-hidden="true"
+            className="text-amber-400"
+          >
+            ⚡
+          </span>
+
+          <span className="ml-1">
+            Boostify
+          </span>
         </Link>
 
         {/* Desktop navigation */}

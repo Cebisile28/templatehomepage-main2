@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../../lib/auth";
 
 const LoginPage: React.FC = () => {
@@ -10,7 +10,9 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     setLoading(true);
@@ -25,7 +27,9 @@ const LoginPage: React.FC = () => {
       }
 
       if (result.data?.user) {
-        const role = await auth.getUserRole(result.data.user.id);
+        const role = await auth.getUserRole(
+          result.data.user.id
+        );
 
         if (role === "buyer") {
           navigate("/marketplace");
@@ -49,26 +53,40 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
-      <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
+    <div className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white sm:px-6 sm:py-12">
+
+      {/* Boostify Brand */}
+      <div className="mx-auto mb-8 flex w-full max-w-md justify-center">
+        <Link
+          to="/"
+          aria-label="Boostify home"
+          className="inline-flex items-center text-2xl font-extrabold text-amber-400 transition-colors hover:text-amber-300 sm:text-3xl"
+        >
+          <span aria-hidden="true">
+            ⚡
+          </span>
+
+          <span className="ml-1">
+            Boostify
+          </span>
+        </Link>
+      </div>
+
+      <div className="mx-auto flex min-h-[calc(100vh-10rem)] max-w-md items-center justify-center">
         <div className="w-full">
+
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 transition-colors duration-300 sm:p-8 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/20">
+
             <div className="mb-8 text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.8}
-                  stroke="currentColor"
-                  className="h-7 w-7"
+
+              {/* Yellow Lightning Sign */}
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400">
+                <span
+                  aria-hidden="true"
+                  className="text-3xl"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
-                  />
-                </svg>
+                  ⚡
+                </span>
               </div>
 
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -76,10 +94,11 @@ const LoginPage: React.FC = () => {
               </h1>
 
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                Sign in to continue to your account
+                Sign in to continue to your Boostify account
               </p>
             </div>
 
+            {/* ERROR */}
             {error && (
               <div
                 role="alert"
@@ -94,9 +113,25 @@ const LoginPage: React.FC = () => {
                     strokeWidth="2"
                     className="mt-0.5 h-5 w-5 shrink-0"
                   >
-                    <circle cx="12" cy="12" r="9" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="9"
+                    />
+
+                    <line
+                      x1="12"
+                      y1="8"
+                      x2="12"
+                      y2="12"
+                    />
+
+                    <line
+                      x1="12"
+                      y1="16"
+                      x2="12.01"
+                      y2="16"
+                    />
                   </svg>
 
                   <span>{error}</span>
@@ -104,7 +139,11 @@ const LoginPage: React.FC = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-5"
+            >
+              {/* EMAIL */}
               <div>
                 <label
                   htmlFor="email"
@@ -118,14 +157,17 @@ const LoginPage: React.FC = () => {
                   type="email"
                   placeholder="you@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
                   autoComplete="email"
                   required
                   disabled={loading}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-blue-500 dark:focus:ring-blue-500/10"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-amber-400 dark:focus:ring-amber-400/10"
                 />
               </div>
 
+              {/* PASSWORD */}
               <div>
                 <label
                   htmlFor="password"
@@ -139,18 +181,21 @@ const LoginPage: React.FC = () => {
                   type="password"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                   autoComplete="current-password"
                   required
                   disabled={loading}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-blue-500 dark:focus:ring-blue-500/10"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-amber-400 dark:focus:ring-amber-400/10"
                 />
               </div>
 
+              {/* LOGIN BUTTON */}
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all duration-200 hover:bg-blue-700 hover:shadow-blue-600/30 focus:outline-none focus:ring-4 focus:ring-blue-500/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-blue-600"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-amber-400/20 transition-all duration-200 hover:bg-amber-500 hover:shadow-amber-400/30 focus:outline-none focus:ring-4 focus:ring-amber-400/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-amber-400"
               >
                 {loading ? (
                   <>
@@ -185,7 +230,17 @@ const LoginPage: React.FC = () => {
             </form>
 
             <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-              Enter your account details to continue.
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="font-semibold text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+              >
+                Create one
+              </Link>
+            </p>
+
+            <p className="mt-3 text-center text-xs text-slate-400 dark:text-slate-500">
+              Discover • Create • Sell • Grow
             </p>
           </div>
         </div>
