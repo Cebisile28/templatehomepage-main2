@@ -1,77 +1,152 @@
-// src/components/ProtectedRoute.tsx
+
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import type { User } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 
 type Props = {
   children: React.ReactNode;
-  requiredRole?: "buyer" | "seller"; // optional role requirement
+  requiredRole?: "buyer" | "seller";
 };
 
-const ProtectedRoute: React.FC<Props> = ({ children, requiredRole }) => {
+const ProtectedRoute: React.FC<Props> = ({
+  children,
+  requiredRole,
+}) => {
+  const location = useLocation();
+
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<"buyer" | "seller" | null>(null);
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+    let mounted = true;
 
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
-        setRole(profile?.role ?? null);
-      }
+    const loadUser = async () => {
+      try {
+        const {
+          data: { session: currentSession },
+          error,
+        } = await supabase.auth.getSession();
 
-      setLoading(false);
-    };
+        if (error) throw error;
 
-    checkUser();
+        if (!mounted) return;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
+        setSession(currentSession);
 
-        if (currentUser) {
-          const { data: profile } = await supabase
+        if (!currentSession?.user) {
+          setRole(null);
+          setLoading(false);
+          return;
+        }
+
+        const { data: profile, error: profileError } =
+          await supabase
             .from("profiles")
             .select("role")
-            .eq("id", currentUser.id)
+            .eq("id", currentSession.user.id)
             .single();
-          setRole(profile?.role ?? null);
+
+        if (!mounted) return;
+
+        if (profileError) {
+          console.error(
+            "Error loading user role:",
+            profileError.message
+          );
+          setRole(null);
+        } else if (
+          profile?.role === "buyer" ||
+          profile?.role === "seller"
+        ) {
+          setRole(profile.role);
         } else {
           setRole(null);
         }
 
         setLoading(false);
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+
+        if (!mounted) return;
+
+        setSession(null);
+        setRole(null);
+        setLoading(false);
+      }
+    };
+
+    void loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        if (!mounted) return;
+
+        setSession(newSession);
+        setRole(null);
+        setLoading(true);
+
+        // Fetch the profile after the auth callback finishes.
+        setTimeout(() => {
+          if (mounted) {
+            void loadUser();
+          }
+        }, 0);
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
+  // LOADING
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-amber-400 border-t-transparent" />
+
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
+            Checking your account...
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  // VISITORS MUST REGISTER FIRST
+  if (!session?.user) {
+    return (
+      <Navigate
+        to="/register"
+        replace
+        state={{ from: location }}
+      />
+    );
   }
 
+  // SELLER / BUYER ROLE PROTECTION
   if (requiredRole && role !== requiredRole) {
-    // Redirect buyers to marketplace, sellers to dashboard
-    return role === "buyer"
-      ? <Navigate to="/marketplace" replace />
-      : <Navigate to="/seller/dashboard" replace />;
+    if (role === "seller") {
+      return <Navigate to="/seller/dashboard" replace />;
+    }
+
+    if (role === "buyer") {
+      return <Navigate to="/marketplace" replace />;
+    }
+
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
 };
 
 export default ProtectedRoute;
+
+
+

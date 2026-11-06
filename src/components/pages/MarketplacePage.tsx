@@ -1,386 +1,366 @@
 import React, { useMemo, useState } from "react";
-import {
-  ArrowRightIcon,
-  CheckBadgeIcon,
-  MagnifyingGlassIcon,
-  StarIcon,
-  HeartIcon,
-  AdjustmentsHorizontalIcon,
-} from "@heroicons/react/24/outline";
-import { motion, useReducedMotion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 type Product = {
   id: number;
-  name: string;
-  category: string;
-  price: number;
+  title: string;
   seller: string;
+  price: number;
   rating: number;
-  reviews: number;
+  category: string;
+  badge: string | null;
   image: string;
-  badge?: string;
-  featured?: boolean;
+  description: string;
 };
-
-const categories = [
-  "All",
-  "Templates",
-  "Branding",
-  "Marketing",
-  "Business",
-  "Resources",
-  "AI Tools",
-];
 
 const products: Product[] = [
   {
     id: 1,
-    name: "Creator Starter Kit",
+    title: "Minimal Notion Business Template",
+    seller: "Studio North",
+    price: 299,
+    rating: 4.8,
     category: "Templates",
-    price: 699,
-    seller: "Nova Studio",
-    rating: 4.9,
-    reviews: 214,
+    badge: "Bestseller",
     image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
-    badge: "Best seller",
-    featured: true,
+      "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=900&auto=format&fit=crop&q=80",
+    description: "A polished workspace for managing clients, content, and projects in one place.",
   },
   {
     id: 2,
-    name: "Brand Launch Pack",
-    category: "Branding",
-    price: 899,
-    seller: "Pixel & Pine",
-    rating: 4.8,
-    reviews: 176,
+    title: "AI-Powered E-commerce Icon Pack",
+    seller: "PixelForge",
+    price: 189,
+    rating: 4.9,
+    category: "Design",
+    badge: "New",
     image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
-    badge: "Hot",
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&auto=format&fit=crop&q=80",
+    description: "Modern digital icons built for product pages, ads, and brand visuals.",
   },
   {
     id: 3,
-    name: "Sales Funnel Blueprint",
-    category: "Marketing",
-    price: 1299,
-    seller: "Scale Works",
-    rating: 5.0,
-    reviews: 132,
+    title: "SaaS Dashboard UI Kit",
+    seller: "DesignFlow",
+    price: 450,
+    rating: 4.7,
+    category: "Design",
+    badge: null,
     image:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80",
-    badge: "Top rated",
+      "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&auto=format&fit=crop&q=80",
+    description: "An editable Figma UI kit for founders, agencies, and product teams.",
   },
   {
     id: 4,
-    name: "Business Operations System",
-    category: "Business",
-    price: 1499,
-    seller: "Northline Labs",
-    rating: 4.7,
-    reviews: 89,
+    title: "Digital Planner 2026 Pack",
+    seller: "Plan & Grow",
+    price: 129,
+    rating: 4.9,
+    category: "Productivity",
+    badge: "Trending",
     image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=900&auto=format&fit=crop&q=80",
+    description: "Organize your goals, schedule, and daily action plans with a clean layout.",
   },
   {
     id: 5,
-    name: "Growth Resource Vault",
-    category: "Resources",
-    price: 499,
-    seller: "BluePeak Media",
-    rating: 4.9,
-    reviews: 305,
+    title: "Etsy Shop SEO Toolkit",
+    seller: "SellerBoost",
+    price: 349,
+    rating: 4.8,
+    category: "Marketing",
+    badge: null,
     image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
-    badge: "Popular",
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80",
+    description: "A step-by-step guide and automation suite to improve your online visibility.",
   },
   {
     id: 6,
-    name: "AI Content Workflow",
-    category: "AI Tools",
-    price: 1799,
-    seller: "Signal Foundry",
-    rating: 4.8,
-    reviews: 142,
+    title: "1000+ ChatGPT Prompts for Creators",
+    seller: "CreatorLab",
+    price: 219,
+    rating: 4.6,
+    category: "AI",
+    badge: "Popular",
     image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-    badge: "New",
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&auto=format&fit=crop&q=80",
+    description: "Curated prompt ideas to accelerate content, support, and client delivery.",
+  },
+  {
+    id: 7,
+    title: "Social Media Content Calendar",
+    seller: "LaunchDay",
+    price: 199,
+    rating: 4.7,
+    category: "Marketing",
+    badge: "Featured",
+    image:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop&q=80",
+    description: "Plan campaigns, track launches, and keep your marketing pipeline organized.",
+  },
+  {
+    id: 8,
+    title: "Brand Identity Starter Kit",
+    seller: "Northleaf Studio",
+    price: 399,
+    rating: 4.9,
+    category: "Branding",
+    badge: "Top Rated",
+    image:
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&auto=format&fit=crop&q=80",
+    description: "A creator-ready brand kit for logos, color systems, and social templates.",
   },
 ];
 
+const categories = [
+  "All",
+  "Templates",
+  "Design",
+  "Marketing",
+  "AI",
+  "Productivity",
+  "Branding",
+];
+
+const sellerHighlights = [
+  { name: "Studio North", sales: "4.8k sales", tag: "Verified seller" },
+  { name: "DesignFlow", sales: "3.2k sales", tag: "Top rated" },
+  { name: "CreatorLab", sales: "2.9k sales", tag: "Fast delivery" },
+];
+
 const MarketplacePage: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("popular");
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+  const visibleProducts = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    const filtered = products.filter((product) => {
       const matchesCategory =
-        selectedCategory === "All" || product.category === selectedCategory;
+        activeCategory === "All" || product.category === activeCategory;
 
-      const matchesSearch = `${product.name} ${product.seller}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      const matchesSearch =
+        query.length === 0 ||
+        product.title.toLowerCase().includes(query) ||
+        product.seller.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query);
 
       return matchesCategory && matchesSearch;
     });
-  }, [searchTerm, selectedCategory]);
+
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "price-low") {
+        return a.price - b.price;
+      }
+
+      if (sortBy === "price-high") {
+        return b.price - a.price;
+      }
+
+      if (sortBy === "rating") {
+        return b.rating - a.rating;
+      }
+
+      return b.rating * 100 - a.rating * 100;
+    });
+  }, [activeCategory, search, sortBy]);
 
   return (
-    <main className="w-full bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
-      <section className="relative overflow-hidden bg-white dark:bg-slate-950">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(251,191,36,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.10),transparent_30%)]" />
+    <>
+      <Helmet>
+        <title>Marketplace | Boostify</title>
+        <meta
+          name="description"
+          content="Browse digital products, templates, AI tools, and creative resources in the Boostify marketplace."
+        />
+      </Helmet>
 
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pb-20 lg:pt-28">
-          <div className="flex flex-col items-center justify-between gap-8 lg:flex-row lg:items-end">
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: "easeOut" }}
-              className="max-w-2xl text-center lg:text-left"
-            >
-              <p className="text-sm font-bold uppercase tracking-[0.22em] text-amber-600 dark:text-amber-400">
-                Marketplace
-              </p>
-
-              <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
-                Discover tools, templates, and growth assets built for real momentum.
-              </h1>
-
-              <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
-                Browse curated digital products created by trusted sellers and designed to help businesses, creators, and entrepreneurs move faster.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
-                <Link
-                  to="/register"
-                  className="inline-flex min-h-[50px] items-center justify-center rounded-xl bg-amber-400 px-6 py-3 text-sm font-bold text-slate-950 shadow-lg transition-all duration-200 hover:bg-amber-500 hover:shadow-xl"
-                >
-                  Sell on Boostify
-                </Link>
-
-                <Link
-                  to="/services"
-                  className="inline-flex min-h-[50px] items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-bold text-slate-900 transition-all duration-200 hover:border-amber-400 hover:text-amber-600 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
-                >
-                  Explore services
-                </Link>
+      <main className="min-h-screen bg-[#f8fafc] text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+          <section className="overflow-hidden rounded-[32px] bg-gradient-to-r from-amber-300 via-yellow-300 to-orange-300 p-6 shadow-[0_18px_50px_rgba(251,191,36,0.25)] sm:p-8 lg:p-10">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-800/80">
+                  Discover and grow
+                </p>
+                <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+                  Find tools, templates, and digital products you can trust.
+                </h1>
               </div>
-            </motion.div>
 
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96 }}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.55, ease: "easeOut", delay: 0.08 }}
-              className="w-full max-w-md rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-lg shadow-slate-200/50 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none"
-            >
-              <div className="flex items-center justify-between border-b border-slate-200 pb-4 dark:border-slate-800">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                    Marketplace snapshot
-                  </p>
-                  <h2 className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white">
-                    24.8k+
-                  </h2>
+              <div className="grid min-w-[240px] gap-3 sm:grid-cols-3 lg:w-[360px] lg:grid-cols-3">
+                <div className="rounded-2xl bg-white/70 p-3 backdrop-blur-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">Products</p>
+                  <p className="mt-2 text-2xl font-black text-slate-950">2.4k</p>
                 </div>
-
-                <div className="rounded-2xl bg-amber-100 p-3 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">
-                  <CheckBadgeIcon className="h-7 w-7" />
+                <div className="rounded-2xl bg-white/70 p-3 backdrop-blur-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">Sellers</p>
+                  <p className="mt-2 text-2xl font-black text-slate-950">680</p>
+                </div>
+                <div className="rounded-2xl bg-white/70 p-3 backdrop-blur-sm">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">Ratings</p>
+                  <p className="mt-2 text-2xl font-black text-slate-950">4.9</p>
                 </div>
               </div>
-
-              <div className="mt-5 space-y-4">
-                {[
-                  { label: "Verified sellers", value: "1,240" },
-                  { label: "Weekly purchases", value: "3,612" },
-                  { label: "Avg. satisfaction", value: "4.9/5" },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 dark:bg-slate-950">
-                    <span className="text-sm text-slate-600 dark:text-slate-300">{item.label}</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="relative w-full max-w-xl">
-              <MagnifyingGlassIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search products, sellers, or categories"
-                className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
-              />
             </div>
 
-            <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-amber-300 hover:text-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
-              <AdjustmentsHorizontalIcon className="h-5 w-5" />
-              Filters
-            </button>
-          </div>
+            <div className="mt-8 flex flex-col gap-3 md:flex-row">
+              <div className="flex flex-1 items-center gap-3 rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+                <span className="text-2xl">⌕</span>
+                <input
+                  type="search"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search products, sellers or keywords"
+                  className="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none"
+                />
+              </div>
 
-          <div className="mt-5 flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedCategory === category
-                    ? "bg-amber-400 text-slate-950 shadow-md"
-                    : "border border-slate-200 bg-white text-slate-700 hover:border-amber-300 hover:text-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
-                }`}
+              <select
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+                className="rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm focus:outline-none"
               >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+                <option value="popular">Popular</option>
+                <option value="rating">Top rated</option>
+                <option value="price-low">Price: Low to high</option>
+                <option value="price-high">Price: High to low</option>
+              </select>
+            </div>
 
-      <section className="mx-auto w-full max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-400">
-              Curated picks
-            </p>
-            <h2 className="mt-2 text-3xl font-extrabold text-slate-900 dark:text-white">Find what fits your next move</h2>
-          </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveCategory(category)}
+                  className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] transition ${
+                    activeCategory === category
+                      ? "bg-slate-950 text-white shadow-lg shadow-slate-900/20"
+                      : "bg-white/75 text-slate-700 hover:bg-white"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </section>
 
-          <span className="hidden rounded-full bg-slate-200 px-3 py-1 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200 sm:inline-flex">
-            {filteredProducts.length} items
-          </span>
-        </div>
+          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <section>
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber-600">
+                    Marketplace
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black text-slate-900 dark:text-white">
+                    {visibleProducts.length} curated picks
+                  </h2>
+                </div>
+              </div>
 
-        {filteredProducts.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">No products match your search</h3>
-            <p className="mt-2 text-slate-600 dark:text-slate-300">Try another keyword or switch categories to discover more listings.</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredProducts.map((product, index) => (
-              <motion.article
-                key={product.id}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.4, delay: index * 0.04, ease: "easeOut" }}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+              {visibleProducts.length > 0 ? (
+                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                  {visibleProducts.map((product) => (
+                    <article
+                      key={product.id}
+                      className="group overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
+                    >
+                      <Link to={`/product/${product.id}`}>
+                        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                          <img
+                            src={product.image}
+                            alt={product.title}
+                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                          />
+                          {product.badge && (
+                            <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-slate-950">
+                              {product.badge}
+                            </span>
+                          )}
+                        </div>
 
-                  <div className="absolute left-4 top-4 flex items-center gap-2">
-                    {product.badge && (
-                      <span className="rounded-full bg-amber-400/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-950">
-                        {product.badge}
+                        <div className="p-4">
+                          <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span>{product.category}</span>
+                            <span className="text-amber-600">★ {product.rating}</span>
+                          </div>
+
+                          <h3 className="mt-3 line-clamp-2 text-lg font-black text-slate-900 dark:text-white">
+                            {product.title}
+                          </h3>
+
+                          <p className="mt-2 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
+                            {product.description}
+                          </p>
+
+                          <div className="mt-4 flex items-center justify-between gap-3">
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                {product.seller}
+                              </p>
+                              <p className="mt-1 text-xl font-black text-slate-950 dark:text-white">
+                                R{product.price}
+                              </p>
+                            </div>
+
+                            <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-amber-700">
+                              View
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">No products match your search.</p>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                    Try a different keyword or switch to another category.
+                  </p>
+                </div>
+              )}
+            </section>
+
+            <aside className="space-y-6">
+              <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-600">Trusted sellers</p>
+                <div className="mt-4 space-y-3">
+                  {sellerHighlights.map((seller) => (
+                    <div
+                      key={seller.name}
+                      className="flex items-center justify-between rounded-2xl bg-slate-50 p-3 dark:bg-slate-800"
+                    >
+                      <div>
+                        <p className="font-bold text-slate-900 dark:text-white">{seller.name}</p>
+                        <p className="text-xs text-slate-500">{seller.sales}</p>
+                      </div>
+                      <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-700">
+                        {seller.tag}
                       </span>
-                    )}
-
-                    <button
-                      type="button"
-                      aria-label={`Save ${product.name}`}
-                      className="rounded-full bg-white/90 p-2 text-slate-700 shadow-sm transition-colors hover:text-amber-600"
-                    >
-                      <HeartIcon className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-4 p-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                      {product.category}
-                    </span>
-
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{product.reviews} reviews</span>
-                  </div>
-
-                  <div>
-                    <Link to={`/product/${product.id}`} className="block text-xl font-bold text-slate-900 transition-colors hover:text-amber-600 dark:text-white dark:hover:text-amber-400">
-                      {product.name}
-                    </Link>
-
-                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">by {product.seller}</p>
-                  </div>
-
-                  <div className="flex items-center gap-1 text-amber-500">
-                    {[...Array(5)].map((_, starIndex) => (
-                      <StarIcon
-                        key={starIndex}
-                        className={`h-4 w-4 ${
-                          starIndex < Math.round(product.rating)
-                            ? "fill-current"
-                            : "text-slate-300 dark:text-slate-600"
-                        }`}
-                      />
-                    ))}
-                    <span className="ml-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
-                      {product.rating.toFixed(1)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 pt-2">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Price</p>
-                      <p className="text-2xl font-extrabold text-slate-900 dark:text-white">R{product.price}</p>
                     </div>
-
-                    <Link
-                      to={`/product/${product.id}`}
-                      className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-amber-500 hover:text-slate-950 dark:bg-amber-400 dark:text-slate-950 dark:hover:bg-amber-500"
-                    >
-                      View
-                      <ArrowRightIcon className="h-4 w-4" />
-                    </Link>
-                  </div>
+                  ))}
                 </div>
-              </motion.article>
-            ))}
-          </div>
-        )}
-      </section>
+              </div>
 
-      <section className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-8 px-4 py-16 text-center sm:px-6 lg:flex-row lg:text-left lg:px-8">
-          <div className="max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">Ready to grow?</p>
-            <h2 className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
-              Turn your ideas into products people want to buy.
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/register"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-amber-400 px-6 py-3 text-sm font-bold text-slate-950 shadow-lg transition-all duration-200 hover:bg-amber-500 hover:shadow-xl"
-            >
-              Start selling
-            </Link>
-
-            <Link
-              to="/contact"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-bold text-slate-900 transition-colors hover:border-amber-400 hover:text-amber-600 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
-            >
-              Talk to us
-            </Link>
+              <div className="rounded-[24px] border border-slate-200 bg-gradient-to-br from-slate-950 to-slate-900 p-5 text-white shadow-sm">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-400">Why buyers choose us</p>
+                <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                  <li>• Curated digital products from verified creators</li>
+                  <li>• Secure checkout and trusted seller reviews</li>
+                  <li>• Fast delivery and easy buyer support</li>
+                </ul>
+              </div>
+            </aside>
           </div>
         </div>
-      </section>
-    </main>
+      </main>
+    </>
   );
 };
 
 export default MarketplacePage;
+

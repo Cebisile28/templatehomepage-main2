@@ -1,7 +1,12 @@
-// src/components/seller/SellerRoutes.tsx
 
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+
+import ProtectedRoute from "../ProtectedRoute";
 
 import SellerLayout from "./SellerLayout";
 import SellerDashboard from "./SellerDashboard";
@@ -17,83 +22,94 @@ import SellerProfile from "./SellerProfile";
 
 const SellerRoutes: React.FC = () => {
   return (
-    <SellerLayout>
-      <Routes>
-        {/* Seller home */}
-        <Route
-          path="/"
-          element={<Navigate to="/seller/dashboard" replace />}
-        />
+    <ProtectedRoute requiredRole="seller">
+      <SellerLayout>
+        <Routes>
 
-        {/* Dashboard */}
-        <Route
-          path="/dashboard"
-          element={<SellerDashboard />}
-        />
+          {/* /seller redirects to /seller/dashboard */}
+          <Route
+            index
+            element={
+              <Navigate
+                to="/seller/dashboard"
+                replace
+              />
+            }
+          />
 
-        {/* Profile */}
-        <Route
-          path="/profile"
-          element={<SellerProfile />}
-        />
+          {/* Seller dashboard */}
+          <Route
+            path="dashboard"
+            element={<SellerDashboard />}
+          />
 
-        {/* Products */}
-        <Route
-          path="/products"
-          element={<Products />}
-        />
+          {/* Seller profile */}
+          <Route
+            path="profile"
+            element={<SellerProfile />}
+          />
 
-        {/* Create Product */}
-        <Route
-          path="/products/create"
-          element={<CreateProduct />}
-        />
+          {/* Products */}
+          <Route
+            path="products"
+            element={<Products />}
+          />
 
-        {/* Orders */}
-        <Route
-          path="/orders"
-          element={<Orders />}
-        />
+          <Route
+            path="products/create"
+            element={<CreateProduct />}
+          />
 
-        {/* Customers */}
-        <Route
-          path="/customers"
-          element={<Customers />}
-        />
+          {/* Orders and customers */}
+          <Route
+            path="orders"
+            element={<Orders />}
+          />
 
-        {/* Analytics */}
-        <Route
-          path="/analytics"
-          element={<Analytics />}
-        />
+          <Route
+            path="customers"
+            element={<Customers />}
+          />
 
-        {/* Reviews */}
-        <Route
-          path="/reviews"
-          element={<Reviews />}
-        />
+          {/* Business management */}
+          <Route
+            path="analytics"
+            element={<Analytics />}
+          />
 
-        {/* Earnings */}
-        <Route
-          path="/earnings"
-          element={<Earnings />}
-        />
+          <Route
+            path="reviews"
+            element={<Reviews />}
+          />
 
-        {/* Settings */}
-        <Route
-          path="/settings"
-          element={<Settings />}
-        />
+          <Route
+            path="earnings"
+            element={<Earnings />}
+          />
 
-        {/* Unknown seller page */}
-        <Route
-          path="*"
-          element={<Navigate to="/seller/dashboard" replace />}
-        />
-      </Routes>
-    </SellerLayout>
+          <Route
+            path="settings"
+            element={<Settings />}
+          />
+
+          {/* Unknown seller pages return to dashboard */}
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to="/seller/dashboard"
+                replace
+              />
+            }
+          />
+
+        </Routes>
+      </SellerLayout>
+    </ProtectedRoute>
   );
 };
 
 export default SellerRoutes;
+
+
 

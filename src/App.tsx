@@ -1,8 +1,10 @@
+
 import React from "react";
 import {
   BrowserRouter,
-  Routes,
+  Navigate,
   Route,
+  Routes,
 } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -19,20 +21,12 @@ import ProductPage from "./components/pages/ProductPage";
 import ServicePage from "./components/pages/ServicePage";
 
 import SellerRoutes from "./components/seller/SellerRoutes";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+// Main website layout
 const PublicLayout: React.FC = () => {
   return (
-    <div
-      className="
-        min-h-screen
-        w-full
-        overflow-x-hidden
-        bg-white
-        text-gray-900
-        dark:bg-gray-900
-        dark:text-white
-      "
-    >
+    <div className="min-h-screen w-full overflow-x-hidden bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       <Navbar />
 
       <main className="w-full min-w-0">
@@ -57,11 +51,10 @@ const PublicLayout: React.FC = () => {
             element={<ProductPage />}
           />
 
-          <Route path="/login" element={<LoginPage />} />
-
+          {/* Unknown website pages return to homepage */}
           <Route
-            path="/register"
-            element={<RegisterPage />}
+            path="*"
+            element={<Navigate to="/" replace />}
           />
         </Routes>
       </main>
@@ -71,25 +64,46 @@ const PublicLayout: React.FC = () => {
   );
 };
 
+// Main application
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* SELLER PORTAL */}
+
+        {/* Registration is accessible without signing in */}
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
+
+        {/* Login is accessible without signing in */}
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        {/* All seller pages require an authenticated seller */}
         <Route
           path="/seller/*"
           element={<SellerRoutes />}
         />
 
-        {/* PUBLIC WEBSITE */}
+        {/* All other website pages require authentication */}
         <Route
-          path="*"
-          element={<PublicLayout />}
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <PublicLayout />
+            </ProtectedRoute>
+          }
         />
+
       </Routes>
     </BrowserRouter>
   );
 };
 
 export default App;
+
+
 

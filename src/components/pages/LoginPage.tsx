@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../lib/auth";
 
@@ -9,241 +9,167 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    setLoading(true);
     setError(null);
 
+    if (!email.trim() || !password) {
+      setError("Please enter your email address and password.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const result = await auth.signIn(email, password);
+      const result = await auth.signIn(email.trim(), password);
 
       if (result.error) {
         setError(result.error.message);
         return;
       }
 
-      if (result.data?.user) {
-        const role = await auth.getUserRole(
-          result.data.user.id
-        );
+      const user = result.data?.user;
 
-        if (role === "buyer") {
-          navigate("/marketplace");
-        } else if (role === "seller") {
-          navigate("/seller/dashboard");
-        } else {
-          navigate("/");
-        }
+      if (!user) {
+        setError("We could not sign you in. Please try again.");
+        return;
       }
-    } catch (err) {
+
+      const role = await auth.getUserRole(user.id);
+
+      if (role === "buyer") {
+        navigate("/marketplace", { replace: true });
+      } else if (role === "seller") {
+        navigate("/seller/dashboard", { replace: true });
+      } else {
+        setError(
+          "Your account was signed in, but your buyer or seller profile could not be found. Please contact Boostify support."
+        );
+      }
+    } catch (err: unknown) {
       console.error("Login error:", err);
 
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Something went wrong while logging in.");
-      }
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white sm:px-6 sm:py-12">
-
-      {/* Boostify Brand */}
-      <div className="mx-auto mb-8 flex w-full max-w-md justify-center">
-        <Link
-          to="/"
-          aria-label="Boostify home"
-          className="inline-flex items-center text-2xl font-extrabold text-amber-400 transition-colors hover:text-amber-300 sm:text-3xl"
-        >
-          <span aria-hidden="true">
+    <div className="min-h-screen bg-gray-50 px-4 py-12 dark:bg-gray-950">
+      <div className="mx-auto flex min-h-[75vh] max-w-md flex-col justify-center">
+        <div className="mb-8 text-center">
+          <Link
+            to="/register"
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500 text-3xl font-bold text-white shadow-lg shadow-amber-500/20"
+            aria-label="Go to Boostify registration"
+          >
             ⚡
-          </span>
+          </Link>
 
-          <span className="ml-1">
-            Boostify
-          </span>
-        </Link>
-      </div>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+            Welcome back
+          </h1>
 
-      <div className="mx-auto flex min-h-[calc(100vh-10rem)] max-w-md items-center justify-center">
-        <div className="w-full">
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Sign in to continue to your Boostify account.
+          </p>
+        </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 transition-colors duration-300 sm:p-8 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/20">
-
-            <div className="mb-8 text-center">
-
-              {/* Yellow Lightning Sign */}
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400">
-                <span
-                  aria-hidden="true"
-                  className="text-3xl"
-                >
-                  ⚡
-                </span>
-              </div>
-
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                Welcome back
-              </h1>
-
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                Sign in to continue to your Boostify account
-              </p>
-            </div>
-
-            {/* ERROR */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-7 shadow-xl shadow-gray-200/40 dark:border-gray-800 dark:bg-gray-900 dark:shadow-none sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
               <div
                 role="alert"
-                className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
+                className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
               >
-                <div className="flex items-start gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="mt-0.5 h-5 w-5 shrink-0"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="9"
-                    />
-
-                    <line
-                      x1="12"
-                      y1="8"
-                      x2="12"
-                      y2="12"
-                    />
-
-                    <line
-                      x1="12"
-                      y1="16"
-                      x2="12.01"
-                      y2="16"
-                    />
-                  </svg>
-
-                  <span>{error}</span>
-                </div>
+                {error}
               </div>
             )}
 
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-5"
-            >
-              {/* EMAIL */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
-                >
-                  Email Address
-                </label>
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+              >
+                Email address
+              </label>
 
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) =>
-                    setEmail(e.target.value)
-                  }
-                  autoComplete="email"
-                  required
-                  disabled={loading}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-amber-400 dark:focus:ring-amber-400/10"
-                />
-              </div>
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="Enter your email address"
+                required
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+            </div>
 
-              {/* PASSWORD */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
-                >
-                  Password
-                </label>
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+              >
+                Password
+              </label>
 
+              <div className="relative">
                 <input
                   id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) =>
-                    setPassword(e.target.value)
-                  }
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Enter your password"
                   required
-                  disabled={loading}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 hover:border-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-slate-600 dark:focus:border-amber-400 dark:focus:ring-amber-400/10"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-20 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                 />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  className="absolute inset-y-0 right-3 text-sm font-medium text-gray-500 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-400"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
+            </div>
 
-              {/* LOGIN BUTTON */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-amber-400/20 transition-all duration-200 hover:bg-amber-500 hover:shadow-amber-400/30 focus:outline-none focus:ring-4 focus:ring-amber-400/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-amber-400"
-              >
-                {loading ? (
-                  <>
-                    <svg
-                      className="h-5 w-5 animate-spin"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full items-center justify-center rounded-lg bg-amber-500 px-4 py-3 font-semibold text-white transition hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-gray-900"
+            >
+              {loading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
 
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      />
-                    </svg>
-
-                    Logging in...
-                  </>
-                ) : (
-                  "Login"
-                )}
-              </button>
-            </form>
-
-            <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-              Don't have an account?{" "}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Don't have a Boostify account?{" "}
               <Link
                 to="/register"
-                className="font-semibold text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+                className="font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
               >
-                Create one
+                Create an account
               </Link>
-            </p>
-
-            <p className="mt-3 text-center text-xs text-slate-400 dark:text-slate-500">
-              Discover • Create • Sell • Grow
             </p>
           </div>
         </div>
+
+        <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-500">
+          By signing in, you agree to use Boostify in accordance with its
+          applicable terms and policies.
+        </p>
       </div>
     </div>
   );
