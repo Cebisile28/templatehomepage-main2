@@ -23,35 +23,36 @@ import ServicePage from "./components/pages/ServicePage";
 import SellerRoutes from "./components/seller/SellerRoutes";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Main website layout
+// Public website layout
 const PublicLayout: React.FC = () => {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-white text-gray-900">
       <Navbar />
 
       <main className="w-full min-w-0">
         <Routes>
+          {/* Public homepage */}
           <Route path="/" element={<HomePage />} />
 
+          {/* Public information pages */}
           <Route path="/about" element={<AboutPage />} />
-
           <Route path="/contact" element={<ContactPage />} />
-
           <Route path="/services" element={<ServicePage />} />
+          <Route path="/pricing" element={<PricingPage />} />
 
+          {/* Public marketplace browsing */}
           <Route
             path="/marketplace"
             element={<MarketplacePage />}
           />
 
-          <Route path="/pricing" element={<PricingPage />} />
-
+          {/* Public product previews */}
           <Route
             path="/product/:id"
             element={<ProductPage />}
           />
 
-          {/* Unknown website pages return to homepage */}
+          {/* Unknown public pages return to homepage */}
           <Route
             path="*"
             element={<Navigate to="/" replace />}
@@ -70,32 +71,32 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
 
-        {/* Registration is accessible without signing in */}
+        {/* Public registration */}
         <Route
           path="/register"
           element={<RegisterPage />}
         />
 
-        {/* Login is accessible without signing in */}
+        {/* Public login */}
         <Route
           path="/login"
           element={<LoginPage />}
         />
 
-        {/* All seller pages require an authenticated seller */}
+        {/* Protected seller pages */}
         <Route
           path="/seller/*"
-          element={<SellerRoutes />}
-        />
-
-        {/* All other website pages require authentication */}
-        <Route
-          path="/*"
           element={
-            <ProtectedRoute>
-              <PublicLayout />
+            <ProtectedRoute requiredRole="seller">
+              <SellerRoutes />
             </ProtectedRoute>
           }
+        />
+
+        {/* Public website pages - no registration required */}
+        <Route
+          path="/*"
+          element={<PublicLayout />}
         />
 
       </Routes>
@@ -104,6 +105,8 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+
 
 
 

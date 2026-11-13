@@ -17,6 +17,7 @@ const RegisterPage: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [loadingAction, setLoadingAction] = useState<
     "register" | "verify" | "resend" | null
@@ -113,7 +114,6 @@ const RegisterPage: React.FC = () => {
       setVerificationEmail(cleanEmail);
       setVerificationCode("");
       setShowVerification(true);
-
       setPassword("");
       setConfirmPassword("");
 
@@ -202,9 +202,7 @@ const RegisterPage: React.FC = () => {
         );
       }
 
-      setSuccess(
-        "Your email has been successfully verified!"
-      );
+      setSuccess("Your email has been successfully verified!");
 
       // STEP 4: Redirect to the correct dashboard
       navigate(
@@ -213,12 +211,9 @@ const RegisterPage: React.FC = () => {
           : "/marketplace",
         { replace: true }
       );
-
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Verification failed."
+        err instanceof Error ? err.message : "Verification failed."
       );
     } finally {
       setLoading(false);
@@ -259,7 +254,6 @@ const RegisterPage: React.FC = () => {
       setSuccess(
         "A new verification code has been sent to your email. Please use the newest code."
       );
-
     } catch (err) {
       console.error("Resend verification error:", err);
 
@@ -275,13 +269,13 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen w-full bg-[#fdfcf8] dark:bg-slate-950 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-[440px] rounded-[2rem] border border-amber-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xl shadow-amber-100/30">
+    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-10 dark:bg-slate-950">
+      <div className="w-full max-w-[440px] rounded-[2rem] border border-sky-100 bg-white p-6 shadow-xl shadow-sky-100/30 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none sm:p-8">
 
         {!showVerification ? (
           <>
-            <div className="text-center mb-7">
-              <h1 className="text-2xl font-black tracking-tight">
+            <div className="mb-7 text-center">
+              <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
                 Create your account
               </h1>
 
@@ -293,7 +287,7 @@ const RegisterPage: React.FC = () => {
             {error && (
               <div
                 role="alert"
-                className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+                className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
               >
                 {error}
               </div>
@@ -302,7 +296,7 @@ const RegisterPage: React.FC = () => {
             {success && (
               <div
                 role="status"
-                className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300"
+                className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950/40 dark:text-green-300"
               >
                 {success}
               </div>
@@ -314,7 +308,7 @@ const RegisterPage: React.FC = () => {
               noValidate
             >
               <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   Full name
                 </label>
 
@@ -324,12 +318,12 @@ const RegisterPage: React.FC = () => {
                   placeholder="Enter your full name"
                   autoComplete="name"
                   required
-                  className="w-full rounded-xl border border-amber-100 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-3 text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   Email address
                 </label>
 
@@ -340,12 +334,12 @@ const RegisterPage: React.FC = () => {
                   placeholder="you@example.com"
                   autoComplete="email"
                   required
-                  className="w-full rounded-xl border border-amber-100 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-3 text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   Password
                 </label>
 
@@ -357,13 +351,13 @@ const RegisterPage: React.FC = () => {
                     placeholder="At least 6 characters"
                     autoComplete="new-password"
                     required
-                    className="w-full rounded-xl border border-amber-100 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-3 pr-16 text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                   />
 
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-600 px-2 py-1 rounded-lg hover:bg-amber-100"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-bold text-sky-600 transition hover:bg-sky-50 dark:text-sky-400 dark:hover:bg-slate-800"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
@@ -371,7 +365,7 @@ const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   Confirm password
                 </label>
 
@@ -385,7 +379,7 @@ const RegisterPage: React.FC = () => {
                     placeholder="Repeat password"
                     autoComplete="new-password"
                     required
-                    className="w-full rounded-xl border border-amber-100 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-3 pr-16 text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                   />
 
                   <button
@@ -393,7 +387,7 @@ const RegisterPage: React.FC = () => {
                     onClick={() =>
                       setShowConfirmPassword((v) => !v)
                     }
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-600 px-2 py-1 rounded-lg hover:bg-amber-100"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-bold text-sky-600 transition hover:bg-sky-50 dark:text-sky-400 dark:hover:bg-slate-800"
                   >
                     {showConfirmPassword ? "Hide" : "Show"}
                   </button>
@@ -401,7 +395,7 @@ const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-500">
+                <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   Choose account type
                 </p>
 
@@ -409,16 +403,18 @@ const RegisterPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setRole("buyer")}
+                    aria-pressed={role === "buyer"}
                     className={`rounded-xl border p-3 text-left transition ${
                       role === "buyer"
-                        ? "border-amber-400 bg-gradient-to-br from-amber-400 to-yellow-500 text-slate-950 shadow"
-                        : "border-amber-100 bg-white dark:bg-slate-950 hover:border-amber-300"
+                        ? "border-sky-500 bg-sky-500 text-white shadow-md shadow-sky-500/20"
+                        : "border-slate-200 bg-white text-slate-800 hover:border-sky-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-600"
                     }`}
                   >
                     <span className="block text-sm font-black">
                       Buyer
                     </span>
-                    <span className="text-[11px] opacity-70">
+
+                    <span className="text-[11px] opacity-80">
                       Buy products
                     </span>
                   </button>
@@ -426,16 +422,18 @@ const RegisterPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setRole("seller")}
+                    aria-pressed={role === "seller"}
                     className={`rounded-xl border p-3 text-left transition ${
                       role === "seller"
-                        ? "border-amber-400 bg-gradient-to-br from-amber-400 to-yellow-500 text-slate-950 shadow"
-                        : "border-amber-100 bg-white dark:bg-slate-950 hover:border-amber-300"
+                        ? "border-sky-500 bg-sky-500 text-white shadow-md shadow-sky-500/20"
+                        : "border-slate-200 bg-white text-slate-800 hover:border-sky-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-600"
                     }`}
                   >
                     <span className="block text-sm font-black">
                       Seller
                     </span>
-                    <span className="text-[11px] opacity-70">
+
+                    <span className="text-[11px] opacity-80">
                       Sell products
                     </span>
                   </button>
@@ -444,7 +442,7 @@ const RegisterPage: React.FC = () => {
 
               {role === "seller" && (
                 <div>
-                  <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                  <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                     Business / Store name
                   </label>
 
@@ -455,7 +453,7 @@ const RegisterPage: React.FC = () => {
                     }
                     placeholder="Your store name"
                     required
-                    className="w-full rounded-xl border border-amber-100 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-3 text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                   />
                 </div>
               )}
@@ -463,7 +461,7 @@ const RegisterPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-[48px] rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 font-black text-sm text-slate-950 shadow hover:from-amber-500 hover:to-yellow-600 transition disabled:opacity-60"
+                className="h-[48px] w-full rounded-xl bg-sky-500 text-sm font-black text-white shadow-md shadow-sky-500/20 transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
               >
                 {loadingAction === "register"
                   ? "Creating account..."
@@ -471,11 +469,11 @@ const RegisterPage: React.FC = () => {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="font-bold text-amber-600 hover:underline"
+                className="font-bold text-sky-600 transition hover:text-sky-700 hover:underline dark:text-sky-400 dark:hover:text-sky-300"
               >
                 Sign in
               </Link>
@@ -483,10 +481,10 @@ const RegisterPage: React.FC = () => {
           </>
         ) : (
           <div className="text-center">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-950">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-950">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-600"
+                className="h-8 w-8 text-sky-600 dark:text-sky-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -500,7 +498,7 @@ const RegisterPage: React.FC = () => {
               </svg>
             </div>
 
-            <h1 className="text-2xl font-black tracking-tight">
+            <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
               Verify your email
             </h1>
 
@@ -508,7 +506,7 @@ const RegisterPage: React.FC = () => {
               We've sent a six-digit verification code to:
             </p>
 
-            <p className="mt-2 font-bold text-slate-800 dark:text-white break-all">
+            <p className="mt-2 break-all font-bold text-slate-800 dark:text-white">
               {verificationEmail}
             </p>
 
@@ -519,7 +517,7 @@ const RegisterPage: React.FC = () => {
             {error && (
               <div
                 role="alert"
-                className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+                className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
               >
                 {error}
               </div>
@@ -528,14 +526,14 @@ const RegisterPage: React.FC = () => {
             {success && (
               <div
                 role="status"
-                className="mt-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300"
+                className="mt-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950/40 dark:text-green-300"
               >
                 {success}
               </div>
             )}
 
             <div className="mt-6">
-              <label className="mb-2 block text-left text-xs font-black uppercase tracking-widest text-slate-500">
+              <label className="mb-2 block text-left text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                 Verification code
               </label>
 
@@ -557,7 +555,7 @@ const RegisterPage: React.FC = () => {
                 }}
                 placeholder="000000"
                 aria-label="Six-digit verification code"
-                className="w-full rounded-xl border border-amber-200 bg-amber-50/50 dark:bg-slate-950 dark:border-slate-700 px-4 py-4 text-center text-2xl font-black tracking-[0.5em] outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-center text-2xl font-black tracking-[0.5em] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
@@ -565,7 +563,7 @@ const RegisterPage: React.FC = () => {
               type="button"
               onClick={handleVerifyEmail}
               disabled={loading || verificationCode.length !== 6}
-              className="mt-5 w-full h-[48px] rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 font-black text-sm text-slate-950 shadow hover:from-amber-500 hover:to-yellow-600 transition disabled:opacity-60"
+              className="mt-5 h-[48px] w-full rounded-xl bg-sky-500 text-sm font-black text-white shadow-md shadow-sky-500/20 transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
             >
               {loadingAction === "verify"
                 ? "Verifying..."
@@ -581,7 +579,7 @@ const RegisterPage: React.FC = () => {
                 type="button"
                 onClick={handleResendCode}
                 disabled={loading}
-                className="mt-2 font-bold text-amber-600 hover:underline disabled:opacity-50"
+                className="mt-2 font-bold text-sky-600 transition hover:text-sky-700 hover:underline disabled:opacity-50 dark:text-sky-400 dark:hover:text-sky-300"
               >
                 {loadingAction === "resend"
                   ? "Sending new code..."
@@ -598,7 +596,7 @@ const RegisterPage: React.FC = () => {
                 setSuccess(null);
               }}
               disabled={loading}
-              className="mt-6 text-sm font-semibold text-slate-500 hover:text-amber-600 disabled:opacity-50"
+              className="mt-6 text-sm font-semibold text-slate-500 transition hover:text-sky-600 disabled:opacity-50 dark:text-slate-400 dark:hover:text-sky-400"
             >
               Back to registration
             </button>
@@ -610,6 +608,7 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
+
 
 
 

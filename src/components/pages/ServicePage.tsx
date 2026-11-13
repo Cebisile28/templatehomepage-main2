@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -17,202 +18,137 @@ const ServicePage: React.FC = () => {
         <meta name="theme-color" content="#ffffff" />
       </Helmet>
 
-      <main className="min-h-screen overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white">
-        {/* HEADER */}
-        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-          <div className="mx-auto max-w-[1400px] px-4 py-4">
-            <div className="flex items-center justify-between gap-3">
-              <Link
-                to="/"
-                aria-label="Boostify homepage"
-                className="flex shrink-0 items-center gap-2"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-xl text-white">
-                  ⚡
-                </span>
-                <span className="text-xl font-extrabold tracking-tight">
-                  Boostify
-                </span>
-              </Link>
+      <main className="min-h-screen overflow-x-hidden bg-white text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
 
-              <div className="flex items-center gap-2">
-                <Link
-                  to="/login"
-                  className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 sm:inline-flex"
-                >
-                  Sign in
-                </Link>
+        {/* HERO SECTION */}
+        <section className="relative overflow-hidden border-b border-slate-100 bg-white dark:border-slate-800 dark:bg-slate-950">
+          <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-sky-100/70 blur-3xl dark:bg-sky-900/20" />
 
-                <Link
-                  to="/marketplace"
-                  className="rounded-xl px-2 py-2 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 sm:px-3"
-                >
-                  🛒 <span className="hidden sm:inline">Marketplace</span>
-                  <span className="sm:hidden">Shop</span>
-                </Link>
+          <div className="relative mx-auto grid max-w-[1200px] items-center gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:py-24">
 
-                <Link
-                  to="/register"
-                  className="rounded-xl bg-yellow-500 px-3 py-2.5 text-xs font-bold text-white hover:bg-yellow-600 sm:px-4 sm:text-sm"
-                >
-                  Get Started
-                </Link>
-              </div>
-            </div>
-
-            {/* SEARCH BAR */}
-            <form
-              action="/marketplace"
-              method="get"
-              role="search"
-              className="mt-5 flex w-full items-center gap-2 rounded-2xl border-2 border-yellow-200 bg-slate-50 p-1.5 shadow-md transition focus-within:border-yellow-500 focus-within:ring-4 focus-within:ring-yellow-100 dark:border-slate-700 dark:bg-slate-900 dark:focus-within:ring-yellow-950"
-            >
-              <span
-                className="pl-3 text-xl text-yellow-600"
-                aria-hidden="true"
-              >
-                ⌕
-              </span>
-
-              <input
-                type="search"
-                name="q"
-                placeholder="Search products, templates, AI tools..."
-                aria-label="Search Boostify"
-                className="min-w-0 flex-1 bg-transparent px-2 py-3 text-sm outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 sm:text-base"
-              />
-
-              <button
-                type="submit"
-                className="shrink-0 rounded-xl bg-yellow-500 px-4 py-3 text-sm font-bold text-white hover:bg-yellow-600 sm:px-7"
-              >
-                <span className="sm:hidden">Go</span>
-                <span className="hidden sm:inline">Search</span>
-              </button>
-            </form>
-          </div>
-
-          {/* SIMPLIFIED NAVIGATION */}
-          <nav
-            aria-label="Main navigation"
-            className="border-t border-slate-100 dark:border-slate-800"
-          >
-            <div className="mx-auto flex max-w-[1400px] items-center gap-6 overflow-x-auto px-4 py-3 text-sm font-medium whitespace-nowrap">
-              <Link
-                to="/marketplace"
-                className="shrink-0 text-slate-600 hover:text-yellow-700 dark:text-slate-300 dark:hover:text-yellow-400"
-              >
-                Marketplace
-              </Link>
-
-              <Link
-                to="/contact"
-                className="shrink-0 text-slate-600 hover:text-yellow-700 dark:text-slate-300 dark:hover:text-yellow-400"
-              >
-                Contact
-              </Link>
-
-              <Link
-                to="/services"
-                aria-current="page"
-                className="shrink-0 font-bold text-yellow-700 dark:text-yellow-400"
-              >
-                Services
-              </Link>
-            </div>
-          </nav>
-        </header>
-
-        {/* HERO */}
-        <section className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-          <div className="mx-auto grid max-w-[1200px] items-center gap-10 px-4 py-12 sm:py-16 lg:grid-cols-2">
             <div>
-              <span className="inline-flex rounded-full bg-yellow-100 px-3 py-1.5 text-xs font-extrabold text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">
+              <span className="inline-flex items-center rounded-full bg-sky-100 px-4 py-2 text-xs font-extrabold tracking-wider text-sky-700 dark:bg-sky-950 dark:text-sky-300">
                 HOW BOOSTIFY WORKS
               </span>
 
-              <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl">
+              <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
                 Discover, create, and grow with{" "}
-                <span className="bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+                <span className="text-sky-500">
                   Boostify.
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
+              <p className="mt-6 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-300 sm:text-lg">
                 Explore digital products, discover creative resources, or
-                learn how to get started as a seller. Find products and
-                resources that match your interests.
+                learn how to get started as a seller. Boostify brings buyers
+                and sellers together in one convenient digital space.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+
                 <Link
                   to="/marketplace"
-                  className="inline-flex items-center justify-center rounded-xl bg-yellow-500 px-6 py-3.5 text-sm font-bold text-white hover:bg-yellow-600"
+                  className="inline-flex items-center justify-center rounded-xl bg-sky-500 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-sky-500/20 transition hover:-translate-y-0.5 hover:bg-sky-600"
                 >
                   Explore Marketplace →
                 </Link>
 
                 <Link
                   to="/register"
-                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-bold hover:border-yellow-300 hover:bg-yellow-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-7 py-4 text-sm font-bold text-slate-700 transition hover:border-sky-400 hover:bg-sky-50 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800"
                 >
                   Get Started as a Seller
                 </Link>
+              </div>
+
+              <div className="mt-8 flex flex-wrap items-center gap-5 text-sm font-medium text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-2">
+                  <span className="text-sky-500">✓</span>
+                  For Buyers
+                </span>
+
+                <span className="flex items-center gap-2">
+                  <span className="text-sky-500">✓</span>
+                  For Sellers
+                </span>
+
+                <span className="flex items-center gap-2">
+                  <span className="text-amber-500">⚡</span>
+                  Digital Discovery
+                </span>
               </div>
             </div>
 
             {/* INTRODUCTION CARD */}
             <div className="relative">
-              <div className="absolute inset-8 rounded-full bg-yellow-200/60 blur-3xl dark:bg-yellow-900/30" />
 
-              <div className="relative rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-2xl text-white">
+              <div className="absolute inset-8 rounded-full bg-sky-200/60 blur-3xl dark:bg-sky-900/30" />
+
+              <div className="relative rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/20 sm:p-8">
+
+                <div className="flex items-center gap-4">
+
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-500 text-2xl text-white shadow-lg shadow-sky-500/20">
                     ⚡
                   </div>
 
                   <div>
-                    <p className="font-extrabold">Welcome to Boostify</p>
+                    <p className="text-lg font-extrabold text-slate-900 dark:text-white">
+                      Welcome to{" "}
+                      <span className="text-amber-500">Boostify</span>
+                    </p>
+
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                       Your digital discovery space
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-7 rounded-2xl border border-yellow-100 bg-yellow-50/70 p-5 dark:border-yellow-900 dark:bg-yellow-950/40">
-                  <p className="text-sm font-bold text-yellow-700 dark:text-yellow-300">
+                <div className="mt-8 rounded-2xl border border-sky-100 bg-sky-50 p-5 dark:border-sky-900 dark:bg-sky-950/40">
+
+                  <p className="text-sm font-bold text-sky-700 dark:text-sky-300">
                     Explore what you need
                   </p>
 
-                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
                     Browse the marketplace and explore digital products and
                     creative resources.
                   </p>
 
                   <Link
                     to="/marketplace"
-                    className="mt-4 inline-flex rounded-xl bg-yellow-500 px-4 py-2.5 text-sm font-bold text-white hover:bg-yellow-600"
+                    className="mt-5 inline-flex items-center rounded-xl bg-sky-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-sky-600"
                   >
-                    Browse Products
+                    Browse Products →
                   </Link>
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
+                <div className="mt-5 grid grid-cols-2 gap-4">
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
                     <span className="text-2xl">🛍️</span>
-                    <p className="mt-3 text-sm font-bold">For Buyers</p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+
+                    <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                      For Buyers
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
                       Explore available products.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
                     <span className="text-2xl">🎨</span>
-                    <p className="mt-3 text-sm font-bold">For Sellers</p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+
+                    <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                      For Sellers
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
                       Learn how to get started.
                     </p>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -220,21 +156,26 @@ const ServicePage: React.FC = () => {
         </section>
 
         {/* BUYER AND SELLER INFORMATION */}
-        <section className="mx-auto grid max-w-[1200px] gap-6 px-4 py-12 lg:grid-cols-2 lg:py-16">
+        <section className="mx-auto grid max-w-[1200px] gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-20">
+
           {/* BUYERS */}
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-100 text-xl dark:bg-yellow-950">
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-lg dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-2xl dark:bg-sky-950">
               🛍️
             </div>
 
-            <h2 className="mt-5 text-2xl font-black">For Buyers</h2>
+            <h2 className="mt-6 text-2xl font-black text-slate-900 dark:text-white">
+              For Buyers
+            </h2>
 
-            <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
               Discover digital products and explore the available
-              marketplace.
+              marketplace. Find resources that match your interests and needs.
             </p>
 
-            <div className="mt-7 space-y-6">
+            <div className="mt-8 space-y-7">
+
               {[
                 {
                   step: "01",
@@ -253,13 +194,17 @@ const ServicePage: React.FC = () => {
                 },
               ].map((item) => (
                 <div key={item.step} className="flex gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-yellow-100 text-xs font-extrabold text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">
+
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-xs font-extrabold text-sky-700 dark:bg-sky-950 dark:text-sky-300">
                     {item.step}
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold">{item.title}</h3>
-                    <p className="mt-1.5 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {item.title}
+                    </h3>
+
+                    <p className="mt-2 text-sm leading-7 text-slate-500 dark:text-slate-400">
                       {item.desc}
                     </p>
                   </div>
@@ -269,29 +214,34 @@ const ServicePage: React.FC = () => {
 
             <Link
               to="/marketplace"
-              className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-yellow-500 px-5 py-3.5 text-sm font-bold text-white hover:bg-yellow-600"
+              className="mt-9 inline-flex w-full items-center justify-center rounded-xl bg-sky-500 px-5 py-4 text-sm font-bold text-white transition hover:bg-sky-600"
             >
               Start Exploring →
             </Link>
           </div>
 
           {/* SELLERS */}
-          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 text-white sm:p-8">
-            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+          <div className="relative overflow-hidden rounded-[2rem] bg-sky-500 p-6 text-white shadow-xl shadow-sky-500/10 sm:p-8">
+
+            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/15 blur-3xl" />
 
             <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-xl">
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 text-2xl">
                 🎨
               </div>
 
-              <h2 className="mt-5 text-2xl font-black">For Sellers</h2>
+              <h2 className="mt-6 text-2xl font-black">
+                For Sellers
+              </h2>
 
-              <p className="mt-3 text-sm leading-6 text-white/80">
+              <p className="mt-3 text-sm leading-7 text-white/90">
                 Interested in offering products on Boostify? Explore
                 registration and the seller options available to you.
               </p>
 
-              <div className="mt-7 space-y-6">
+              <div className="mt-8 space-y-7">
+
                 {[
                   {
                     step: "01",
@@ -310,13 +260,17 @@ const ServicePage: React.FC = () => {
                   },
                 ].map((item) => (
                   <div key={item.step} className="flex gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-xs font-extrabold text-yellow-700">
+
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xs font-extrabold text-sky-700">
                       {item.step}
                     </div>
 
                     <div>
-                      <h3 className="text-sm font-bold">{item.title}</h3>
-                      <p className="mt-1.5 text-sm leading-6 text-white/75">
+                      <h3 className="text-sm font-bold text-white">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 text-sm leading-7 text-white/85">
                         {item.desc}
                       </p>
                     </div>
@@ -326,7 +280,7 @@ const ServicePage: React.FC = () => {
 
               <Link
                 to="/register"
-                className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-white px-5 py-3.5 text-sm font-bold text-yellow-700 hover:bg-yellow-50"
+                className="mt-9 inline-flex w-full items-center justify-center rounded-xl bg-white px-5 py-4 text-sm font-bold text-sky-700 transition hover:bg-amber-300 hover:text-slate-900"
               >
                 Get Started →
               </Link>
@@ -335,44 +289,55 @@ const ServicePage: React.FC = () => {
         </section>
 
         {/* FINAL CALL TO ACTION */}
-        <section className="mx-auto max-w-[1200px] px-4 pb-12 sm:pb-16">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-yellow-700 dark:text-yellow-400">
-              EXPLORE BOOSTIFY
-            </span>
+        <section className="mx-auto max-w-[1200px] px-4 pb-16 sm:px-6 sm:pb-20">
 
-            <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-              Find your next idea
-            </h2>
+          <div className="relative overflow-hidden rounded-[2rem] border border-sky-100 bg-sky-50 p-7 dark:border-slate-800 dark:bg-slate-900 sm:p-10">
 
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-              Discover digital products and creative resources in one place.
-              Start exploring the marketplace or get in touch if you need help.
-            </p>
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-900/30" />
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to="/marketplace"
-                className="inline-flex items-center justify-center rounded-xl bg-yellow-500 px-6 py-3.5 text-sm font-bold text-white hover:bg-yellow-600"
-              >
-                Explore Marketplace →
-              </Link>
+            <div className="relative">
 
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-6 py-3.5 text-sm font-bold hover:border-yellow-300 hover:bg-yellow-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700"
-              >
-                Contact Boostify
-              </Link>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-sky-700 dark:text-sky-400">
+                EXPLORE BOOSTIFY
+              </span>
+
+              <h2 className="mt-3 text-3xl font-black text-slate-900 dark:text-white sm:text-4xl">
+                Find your next idea.
+              </h2>
+
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-400">
+                Discover digital products and creative resources in one place.
+                Start exploring the marketplace or get in touch if you need help.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+
+                <Link
+                  to="/marketplace"
+                  className="inline-flex items-center justify-center rounded-xl bg-sky-500 px-7 py-4 text-sm font-bold text-white transition hover:bg-sky-600"
+                >
+                  Explore Marketplace →
+                </Link>
+
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-7 py-4 text-sm font-bold text-slate-700 transition hover:border-sky-400 hover:bg-sky-50 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
+                >
+                  Contact Boostify
+                </Link>
+
+              </div>
             </div>
           </div>
         </section>
+
       </main>
     </>
   );
 };
 
 export default ServicePage;
+
 
 
 

@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../lib/auth";
@@ -68,7 +69,7 @@ const LoginPage: React.FC = () => {
         <div className="mb-8 text-center">
           <Link
             to="/register"
-            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500 text-3xl font-bold text-white shadow-lg shadow-amber-500/20"
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-500 text-3xl font-bold text-amber-400 shadow-lg shadow-sky-500/20 transition hover:bg-sky-600"
             aria-label="Go to Boostify registration"
           >
             ⚡
@@ -110,7 +111,7 @@ const LoginPage: React.FC = () => {
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="Enter your email address"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
             </div>
 
@@ -131,13 +132,13 @@ const LoginPage: React.FC = () => {
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Enter your password"
                   required
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-20 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-20 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword((current) => !current)}
-                  className="absolute inset-y-0 right-3 text-sm font-medium text-gray-500 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-400"
+                  className="absolute inset-y-0 right-3 text-sm font-medium text-gray-500 transition hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400"
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
@@ -147,7 +148,7 @@ const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center rounded-lg bg-amber-500 px-4 py-3 font-semibold text-white transition hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-gray-900"
+              className="flex w-full items-center justify-center rounded-lg bg-sky-500 px-4 py-3 font-semibold text-white transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-gray-900"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
@@ -158,7 +159,7 @@ const LoginPage: React.FC = () => {
               Don't have a Boostify account?{" "}
               <Link
                 to="/register"
-                className="font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+                className="font-semibold text-sky-600 transition hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
               >
                 Create an account
               </Link>
@@ -176,4 +177,5 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
 
