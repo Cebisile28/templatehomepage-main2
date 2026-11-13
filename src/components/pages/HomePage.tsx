@@ -60,21 +60,21 @@ const HomePage: React.FC = () => {
       <main className="w-full overflow-hidden bg-white text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
 
         {/* HERO SECTION */}
-        <section className="relative isolate flex min-h-[580px] items-center overflow-hidden bg-slate-900 sm:min-h-[640px]">
+        <section className="relative isolate flex min-h-[620px] items-center overflow-hidden bg-slate-900 sm:min-h-[640px] lg:min-h-[640px]">
 
-          {/* Original background photograph - kept clear and visible */}
+          {/* Responsive background photograph */}
           <img
             src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=2000&q=90"
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-[65%_center] sm:object-center"
           />
 
-          {/* Subtle neutral overlay for readable white text */}
-          <div className="absolute inset-0 -z-10 bg-black/20" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/65 via-black/25 to-transparent" />
+          {/* Image overlays */}
+          <div className="absolute inset-0 -z-10 bg-black/30" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
 
-          <div className="mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 md:py-32 lg:px-10">
+          <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24 md:py-32 lg:px-10">
             <div className="max-w-3xl">
 
               <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
