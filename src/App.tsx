@@ -26,33 +26,28 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Public website layout
 const PublicLayout: React.FC = () => {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-white text-gray-900">
+    <div className="min-h-screen w-full overflow-x-clip bg-white text-slate-900 dark:bg-slate-950 dark:text-white">
       <Navbar />
 
-      <main className="w-full min-w-0">
+      {/* Reserve space for the fixed 64px Navbar */}
+      <main className="w-full min-w-0 pt-16">
         <Routes>
-          {/* Public homepage */}
           <Route path="/" element={<HomePage />} />
-
-          {/* Public information pages */}
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/services" element={<ServicePage />} />
           <Route path="/pricing" element={<PricingPage />} />
 
-          {/* Public marketplace browsing */}
           <Route
             path="/marketplace"
             element={<MarketplacePage />}
           />
 
-          {/* Public product previews */}
           <Route
             path="/product/:id"
             element={<ProductPage />}
           />
 
-          {/* Unknown public pages return to homepage */}
           <Route
             path="*"
             element={<Navigate to="/" replace />}
@@ -70,20 +65,16 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Public registration */}
         <Route
           path="/register"
           element={<RegisterPage />}
         />
 
-        {/* Public login */}
         <Route
           path="/login"
           element={<LoginPage />}
         />
 
-        {/* Protected seller pages */}
         <Route
           path="/seller/*"
           element={
@@ -93,18 +84,17 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Public website pages - no registration required */}
         <Route
           path="/*"
           element={<PublicLayout />}
         />
-
       </Routes>
     </BrowserRouter>
   );
 };
 
 export default App;
+
 
 
 
