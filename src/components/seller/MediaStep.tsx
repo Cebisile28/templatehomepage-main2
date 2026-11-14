@@ -1,180 +1,50 @@
 import React from "react";
-
-import {
-  ProductFormData,
-} from "./CreateProduct";
-
-
+import { ProductFormData } from "./CreateProduct";
 import ImageUploader from "./ImageUploader";
 import FileUploader from "./FileUploader";
 
-
-
 type MediaStepProps = {
-
   product: ProductFormData;
-
-  updateProduct: (
-    data: Partial<ProductFormData>
-  ) => void;
-
+  updateProduct: (data: Partial<ProductFormData>) => void;
 };
-
-
-
-
 
 const MediaStep: React.FC<MediaStepProps> = ({
   product,
   updateProduct,
 }) => {
-
-
   return (
-
-    <div className="space-y-8">
-
-
+    <div className="space-y-8 text-slate-800 dark:text-slate-100">
       <div>
-
-        <h2 className="text-2xl font-bold">
-          Product Media
-        </h2>
-
-
-        <p className="text-gray-500 mt-1">
+        <h2 className="text-2xl font-bold">Product Media</h2>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">
           Upload your product image and digital files.
         </p>
-
-
       </div>
 
-
-
-
-
-
-
-      {/* PRODUCT IMAGE */}
-
-      <div
-        className="
-          bg-gray-50
-          dark:bg-gray-800
-          rounded-xl
-          p-5
-        "
-      >
-
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800">
         <ImageUploader
-
-          value={
-            product.image
-          }
-
-          onChange={(file: File | null) =>
-            updateProduct({
-              image: file,
-            })
-          }
-
+          value={product.image}
+          onChange={(file) => updateProduct({ image: file })}
         />
-
-
       </div>
 
-
-
-
-
-
-
-
-      {/* DIGITAL FILES */}
-
-      <div
-        className="
-          bg-gray-50
-          dark:bg-gray-800
-          rounded-xl
-          p-5
-        "
-      >
-
-
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800">
         <FileUploader
-
-          value={
-            product.files
-          }
-
-
-          onChange={(files: File[]) =>
-            updateProduct({
-              files,
-            })
-          }
-
-
+          value={product.files}
+          onChange={(files) => updateProduct({ files })}
         />
-
-
       </div>
 
-
-
-
-
-
-
-
-      {/* INFORMATION BOX */}
-
-      <div
-        className="
-          rounded-xl
-          bg-amber-50
-          border
-          border-amber-200
-          p-5
-          text-sm
-          text-amber-800
-        "
-      >
-
-        <p className="font-semibold mb-2">
-          Upload Tips
-        </p>
-
-
-        <ul className="list-disc ml-5 space-y-1">
-
-          <li>
-            Use a clear thumbnail image.
-          </li>
-
-          <li>
-            Upload the final version of your digital product.
-          </li>
-
-          <li>
-            Buyers will download these files after purchase.
-          </li>
-
+      <div className="rounded-xl border border-sky-200 bg-sky-50 p-5 text-sm text-sky-800 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
+        <p className="mb-2 font-semibold">Upload Tips</p>
+        <ul className="ml-5 list-disc space-y-1">
+          <li>Use a clear thumbnail image.</li>
+          <li>Upload the final version of your digital product.</li>
+          <li>Buyers will download these files after purchase.</li>
         </ul>
-
-
       </div>
-
-
-
-
-
     </div>
-
   );
-
 };
-
 
 export default MediaStep;

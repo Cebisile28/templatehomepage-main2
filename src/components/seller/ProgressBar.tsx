@@ -4,152 +4,58 @@ type ProgressBarProps = {
   step: number;
 };
 
-const steps = [
-  "Details",
-  "Pricing",
-  "Media",
-  "Review",
-];
+const steps = ["Details", "Pricing", "Media", "Review"];
 
-
-const ProgressBar: React.FC<ProgressBarProps> = ({
-  step,
-}) => {
-
+const ProgressBar: React.FC<ProgressBarProps> = ({ step }) => {
   return (
-
     <div className="w-full">
-
       <div className="flex items-center justify-between">
-
-
         {steps.map((label, index) => {
-
           const stepNumber = index + 1;
-
-          const completed =
-            stepNumber < step;
-
-          const active =
-            stepNumber === step;
-
-
+          const completed = stepNumber < step;
+          const active = stepNumber === step;
 
           return (
-
             <React.Fragment key={label}>
-
-
-              {/* STEP CIRCLE */}
-
               <div className="flex flex-col items-center">
-
-
                 <div
-                  className={`
-                    w-10
-                    h-10
-                    rounded-full
-                    flex
-                    items-center
-                    justify-center
-                    font-bold
-                    transition
-
-                    ${
-                      completed
-                        ? 
-                        "bg-green-500 text-white"
-                        :
-                      active
-                        ?
-                        "bg-amber-400 text-black"
-                        :
-                        "bg-gray-200 dark:bg-gray-700 text-gray-500"
-                    }
-
-                  `}
-                >
-
-                  {
+                  className={`flex h-10 w-10 items-center justify-center rounded-full font-bold transition ${
                     completed
-                      ? "✓"
-                      : stepNumber
-                  }
-
-
+                      ? "bg-sky-500 text-white"
+                      : active
+                        ? "bg-sky-500 text-white ring-4 ring-sky-100 dark:ring-sky-900/50"
+                        : "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300"
+                  }`}
+                >
+                  {completed ? "✓" : stepNumber}
                 </div>
 
-
                 <span
-                  className={`
-                    mt-2
-                    text-sm
-                    font-semibold
-
-                    ${
-                      active
-                        ?
-                        "text-amber-500"
-                        :
-                        "text-gray-500"
-                    }
-
-                  `}
+                  className={`mt-2 text-sm font-semibold ${
+                    active || completed
+                      ? "text-sky-600 dark:text-sky-400"
+                      : "text-slate-500 dark:text-slate-400"
+                  }`}
                 >
-
                   {label}
-
                 </span>
-
-
               </div>
 
-
-
-
-
-              {/* LINE BETWEEN STEPS */}
-
               {index !== steps.length - 1 && (
-
                 <div
-                  className={`
-                    flex-1
-                    h-1
-                    mx-3
-                    rounded
-
-                    ${
-                      stepNumber < step
-                        ?
-                        "bg-green-500"
-                        :
-                        "bg-gray-200 dark:bg-gray-700"
-                    }
-
-                  `}
+                  className={`mx-3 h-1 flex-1 rounded ${
+                    stepNumber < step
+                      ? "bg-sky-500"
+                      : "bg-slate-200 dark:bg-slate-700"
+                  }`}
                 />
-
               )}
-
-
-
             </React.Fragment>
-
           );
-
         })}
-
-
       </div>
-
-
     </div>
-
   );
-
 };
-
 
 export default ProgressBar;

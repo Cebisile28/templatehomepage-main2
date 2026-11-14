@@ -1,497 +1,144 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
+
+type Order = {
+  id: string;
+  customer: string;
+  product: string;
+  amount: string;
+  status: string;
+  date: string;
+};
 
 const Orders: React.FC = () => {
+  // Placeholder until this page is connected to your Supabase orders table.
+  const orders: Order[] = [];
+  const [search, setSearch] = useState("");
 
-  const orders = [
-    {
-      id: "#1001",
-      customer: "Example Customer",
-      product: "Digital Product",
-      amount: "R0.00",
-      status: "Pending",
-      date: "Today",
-    },
+  const filteredOrders = useMemo(
+    () =>
+      orders.filter((order) =>
+        `${order.id} ${order.customer} ${order.product}`
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      ),
+    [orders, search]
+  );
+
+  const stats = [
+    { label: "Total Orders", value: "0" },
+    { label: "Pending Orders", value: "0" },
+    { label: "Completed Orders", value: "0" },
+    { label: "Revenue", value: "R0.00" },
   ];
 
-
   return (
-
     <div className="space-y-8">
-
-
-      {/* HEADER */}
-
       <div>
-
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-900
-          dark:text-white
-        ">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
           Orders
         </h1>
-
-
-        <p className="
-          mt-3
-          text-gray-500
-          dark:text-gray-400
-        ">
+        <p className="mt-3 text-slate-500 dark:text-slate-400">
           View and manage your customer orders.
         </p>
-
-
       </div>
 
-
-
-
-
-
-
-      {/* ORDER SUMMARY */}
-
-
-      <div className="grid md:grid-cols-4 gap-6">
-
-
-
-        <div className="
-          bg-white
-          dark:bg-gray-900
-          rounded-xl
-          shadow
-          border
-          dark:border-gray-800
-          p-6
-        ">
-
-          <p className="text-sm text-gray-500">
-            Total Orders
-          </p>
-
-          <h2 className="
-            text-3xl
-            font-bold
-            mt-2
-            text-gray-900
-            dark:text-white
-          ">
-            0
-          </h2>
-
-        </div>
-
-
-
-
-
-        <div className="
-          bg-white
-          dark:bg-gray-900
-          rounded-xl
-          shadow
-          border
-          dark:border-gray-800
-          p-6
-        ">
-
-          <p className="text-sm text-gray-500">
-            Pending Orders
-          </p>
-
-          <h2 className="
-            text-3xl
-            font-bold
-            mt-2
-            text-amber-400
-          ">
-            0
-          </h2>
-
-        </div>
-
-
-
-
-
-
-        <div className="
-          bg-white
-          dark:bg-gray-900
-          rounded-xl
-          shadow
-          border
-          dark:border-gray-800
-          p-6
-        ">
-
-          <p className="text-sm text-gray-500">
-            Completed Orders
-          </p>
-
-          <h2 className="
-            text-3xl
-            font-bold
-            mt-2
-            text-green-500
-          ">
-            0
-          </h2>
-
-        </div>
-
-
-
-
-
-
-        <div className="
-          bg-white
-          dark:bg-gray-900
-          rounded-xl
-          shadow
-          border
-          dark:border-gray-800
-          p-6
-        ">
-
-          <p className="text-sm text-gray-500">
-            Revenue
-          </p>
-
-          <h2 className="
-            text-3xl
-            font-bold
-            mt-2
-            text-gray-900
-            dark:text-white
-          ">
-            R0.00
-          </h2>
-
-        </div>
-
-
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+          >
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {stat.label}
+            </p>
+            <h2 className="mt-2 text-3xl font-bold text-sky-600 dark:text-sky-400">
+              {stat.value}
+            </h2>
+          </div>
+        ))}
       </div>
 
-
-
-
-
-
-
-
-
-      {/* SEARCH */}
-
-      <section className="
-        bg-white
-        dark:bg-gray-900
-        rounded-xl
-        shadow
-        border
-        dark:border-gray-800
-        p-6
-      ">
-
-
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <input
-
           type="text"
-
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder="Search orders..."
-
-          className="
-            w-full
-            rounded-lg
-            bg-gray-100
-            dark:bg-gray-800
-            p-3
-            outline-none
-            text-gray-900
-            dark:text-white
-          "
-
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900/40"
         />
-
-
       </section>
 
-
-
-
-
-
-
-
-
-      {/* ORDERS TABLE */}
-
-
-      <section className="
-        bg-white
-        dark:bg-gray-900
-        rounded-xl
-        shadow
-        border
-        dark:border-gray-800
-        p-6
-      ">
-
-
-
-        <h2 className="
-          text-xl
-          font-bold
-          mb-6
-          text-gray-900
-          dark:text-white
-        ">
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">
           Customer Orders
         </h2>
 
-
-
-
-
-        {orders.length === 0 ? (
-
-
-          <div className="
-            text-center
-            py-10
-            text-gray-500
-            dark:text-gray-400
-          ">
-
-            No orders yet.
-
-            <br />
-
-            Your customer purchases will appear here.
-
+        {filteredOrders.length === 0 ? (
+          <div className="py-10 text-center text-slate-500 dark:text-slate-400">
+            <p className="font-medium">No orders yet.</p>
+            <p className="mt-2 text-sm">
+              Your customer purchases will appear here when buyers place
+              orders.
+            </p>
           </div>
-
-
-
         ) : (
-
-
-
           <div className="overflow-x-auto">
-
-
-            <table className="w-full text-left">
-
-
+            <table className="w-full text-left text-sm">
               <thead>
-
-
-                <tr className="
-                  border-b
-                  dark:border-gray-800
-                  text-gray-500
-                ">
-
-
-                  <th className="p-3">
-                    Order ID
-                  </th>
-
-
-                  <th className="p-3">
-                    Customer
-                  </th>
-
-
-                  <th className="p-3">
-                    Product
-                  </th>
-
-
-                  <th className="p-3">
-                    Amount
-                  </th>
-
-
-                  <th className="p-3">
-                    Status
-                  </th>
-
-
-                  <th className="p-3">
-                    Date
-                  </th>
-
-
-                  <th className="p-3">
-                    Actions
-                  </th>
-
-
+                <tr className="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
+                  {[
+                    "Order ID",
+                    "Customer",
+                    "Product",
+                    "Amount",
+                    "Status",
+                    "Date",
+                    "Actions",
+                  ].map((heading) => (
+                    <th key={heading} className="whitespace-nowrap p-3">
+                      {heading}
+                    </th>
+                  ))}
                 </tr>
-
-
               </thead>
-
-
-
-
-
               <tbody>
-
-
-                {orders.map((order) => (
-
-
+                {filteredOrders.map((order) => (
                   <tr
                     key={order.id}
-                    className="
-                      border-b
-                      dark:border-gray-800
-                    "
+                    className="border-b border-slate-100 dark:border-slate-800"
                   >
-
-
-
-                    <td className="
-                      p-3
-                      text-gray-900
-                      dark:text-white
-                    ">
+                    <td className="p-3 text-slate-900 dark:text-white">
                       {order.id}
                     </td>
-
-
-
-
-
-                    <td className="
-                      p-3
-                      text-gray-500
-                    ">
+                    <td className="p-3 text-slate-500 dark:text-slate-400">
                       {order.customer}
                     </td>
-
-
-
-
-
-                    <td className="
-                      p-3
-                      text-gray-900
-                      dark:text-white
-                    ">
+                    <td className="p-3 text-slate-900 dark:text-white">
                       {order.product}
                     </td>
-
-
-
-
-
-                    <td className="
-                      p-3
-                      font-semibold
-                      text-gray-900
-                      dark:text-white
-                    ">
+                    <td className="p-3 font-semibold text-slate-900 dark:text-white">
                       {order.amount}
                     </td>
-
-
-
-
-
                     <td className="p-3">
-
-                      <span className="
-                        bg-amber-100
-                        text-amber-700
-                        px-3
-                        py-1
-                        rounded-full
-                        text-sm
-                      ">
-
+                      <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">
                         {order.status}
-
                       </span>
-
                     </td>
-
-
-
-
-
-                    <td className="
-                      p-3
-                      text-gray-500
-                    ">
+                    <td className="p-3 text-slate-500 dark:text-slate-400">
                       {order.date}
                     </td>
-
-
-
-
-
-                    <td className="p-3 space-x-3">
-
-
-                      <button className="
-                        text-blue-500
-                        hover:underline
-                      ">
-                        View
-                      </button>
-
-
-
-
-                      <button className="
-                        text-green-500
-                        hover:underline
-                      ">
-                        Complete
-                      </button>
-
-
+                    <td className="p-3 text-sky-600 dark:text-sky-400">
+                      Not available
                     </td>
-
-
-
-
                   </tr>
-
-
                 ))}
-
-
-
               </tbody>
-
-
             </table>
-
-
           </div>
-
-
         )}
-
-
       </section>
-
-
-
-
-
     </div>
-
   );
-
 };
-
 
 export default Orders;

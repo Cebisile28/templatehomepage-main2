@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-
 import ImageUploader from "./ImageUploader";
 import FileUploader from "./FileUploader";
 
 type ProductFormProps = {
   sellerId: string;
-
   onSubmit: (product: {
     title: string;
     shortDescription: string;
@@ -19,190 +17,85 @@ type ProductFormProps = {
   }) => Promise<void>;
 };
 
+const fieldClass =
+  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900/40";
+
 const ProductForm: React.FC<ProductFormProps> = ({
   sellerId,
   onSubmit,
 }) => {
-
   const [title, setTitle] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [tags, setTags] = useState("");
+  const [price, setPrice] = useState("");
+  const [status, setStatus] = useState<"draft" | "active">("draft");
+  const [image, setImage] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const [shortDescription, setShortDescription] =
-    useState("");
-
-  const [description, setDescription] =
-    useState("");
-
-  const [category, setCategory] =
-    useState("");
-
-  const [tags, setTags] =
-    useState("");
-
-  const [price, setPrice] =
-    useState("");
-
-  const [status, setStatus] =
-    useState<"draft" | "active">(
-      "draft"
-    );
-
-
-
-  // Uploads
-
-  const [image, setImage] =
-    useState<File | null>(null);
-
-  const [files, setFiles] =
-    useState<File[]>([]);
-
-
-
-  // UI
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  const [success, setSuccess] =
-    useState("");
-
-
-
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setError("");
     setSuccess("");
 
-
-
     if (!sellerId) {
-
-      setError(
-        "You must be logged in."
-      );
-
+      setError("You must be logged in.");
       return;
-
     }
-
-
 
     if (!title.trim()) {
-
-      setError(
-        "Product title is required."
-      );
-
+      setError("Product title is required.");
       return;
-
     }
-
-
 
     if (!description.trim()) {
-
-      setError(
-        "Description is required."
-      );
-
+      setError("Description is required.");
       return;
-
     }
-
-
 
     if (!category) {
-
-      setError(
-        "Please select a category."
-      );
-
+      setError("Please select a category.");
       return;
-
     }
 
-
-
-    if (!price || Number(price) <= 0) {
-
-      setError(
-        "Please enter a valid price."
-      );
-
+    if (!price || Number(price) <= 0 || !Number.isFinite(Number(price))) {
+      setError("Please enter a valid price.");
       return;
-
     }
-
-
 
     if (!image) {
-
-      setError(
-        "Please upload a product image."
-      );
-
+      setError("Please upload a product image.");
       return;
-
     }
-
-
 
     if (files.length === 0) {
-
-      setError(
-        "Please upload at least one digital file."
-      );
-
+      setError("Please upload at least one digital file.");
       return;
-
     }
 
-
-
     try {
-
       setLoading(true);
 
       await onSubmit({
-
-        title,
-
-        shortDescription,
-
-        description,
-
+        title: title.trim(),
+        shortDescription: shortDescription.trim(),
+        description: description.trim(),
         category,
-
         tags: tags
           .split(",")
-          .map(tag => tag.trim())
+          .map((tag) => tag.trim())
           .filter(Boolean),
-
         price: Number(price),
-
         status,
-
         image,
-
         files,
-
       });
 
-
-
-      setSuccess(
-        "Product created successfully!"
-      );
-
-
-
+      setSuccess("Product created successfully!");
       setTitle("");
       setShortDescription("");
       setDescription("");
@@ -210,259 +103,171 @@ const ProductForm: React.FC<ProductFormProps> = ({
       setTags("");
       setPrice("");
       setStatus("draft");
-
       setImage(null);
       setFiles([]);
-
-    }
-
-    catch (err) {
-
-      if (err instanceof Error) {
-
-        setError(
-          err.message
-        );
-
-      }
-
-      else {
-
-        setError(
-          "Something went wrong."
-        );
-
-      }
-
-    }
-
-    finally {
-
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
+    } finally {
       setLoading(false);
-
     }
-
   };
-    return (
+
+  return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 space-y-6"
+      className="space-y-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900"
     >
       <div>
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
           Add New Product
         </h2>
-
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Create and publish your digital product.
         </p>
       </div>
 
       {success && (
-        <div className="rounded-lg bg-green-100 text-green-700 px-4 py-3">
+        <div className="rounded-lg bg-sky-50 px-4 py-3 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300">
           {success}
         </div>
       )}
 
       {error && (
-        <div className="rounded-lg bg-red-100 text-red-700 px-4 py-3">
+        <div className="rounded-lg bg-red-100 px-4 py-3 text-red-700 dark:bg-red-950/40 dark:text-red-300">
           {error}
         </div>
       )}
 
-      {/* Product Title */}
-
       <div>
-        <label className="block font-medium mb-2">
-          Product Title
-        </label>
-
+        <label className="mb-2 block font-medium">Product Title</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="React Admin Dashboard"
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+          className={fieldClass}
         />
       </div>
 
-      {/* Short Description */}
-
       <div>
-        <label className="block font-medium mb-2">
-          Short Description
-        </label>
-
+        <label className="mb-2 block font-medium">Short Description</label>
         <textarea
           rows={2}
           value={shortDescription}
-          onChange={(e) =>
-            setShortDescription(e.target.value)
-          }
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+          onChange={(e) => setShortDescription(e.target.value)}
+          className={fieldClass}
         />
       </div>
 
-      {/* Description */}
-
       <div>
-        <label className="block font-medium mb-2">
-          Full Description
-        </label>
-
+        <label className="mb-2 block font-medium">Full Description</label>
         <textarea
           rows={6}
           value={description}
-          onChange={(e) =>
-            setDescription(e.target.value)
-          }
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+          onChange={(e) => setDescription(e.target.value)}
+          className={fieldClass}
         />
       </div>
 
-      {/* Category + Price */}
-
-      <div className="grid md:grid-cols-2 gap-6">
-
+      <div className="grid gap-6 md:grid-cols-2">
         <div>
-
-          <label className="block font-medium mb-2">
-            Category
-          </label>
-
+          <label className="mb-2 block font-medium">Category</label>
           <select
             value={category}
-            onChange={(e) =>
-              setCategory(e.target.value)
-            }
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+            onChange={(e) => setCategory(e.target.value)}
+            className={fieldClass}
           >
             <option value="">Select Category</option>
-            <option>Ebooks</option>
-            <option>Templates</option>
-            <option>UI Kits</option>
-            <option>Website Themes</option>
-            <option>Mobile Apps</option>
-            <option>Graphics</option>
-            <option>Icons</option>
-            <option>Fonts</option>
-            <option>Courses</option>
-            <option>Software</option>
-            <option>Plugins</option>
-            <option>Source Code</option>
-            <option>Other</option>
+            {[
+              "Ebooks",
+              "Templates",
+              "UI Kits",
+              "Website Themes",
+              "Mobile Apps",
+              "Graphics",
+              "Icons",
+              "Fonts",
+              "Courses",
+              "Software",
+              "Plugins",
+              "Source Code",
+              "Other",
+            ].map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
-
         </div>
 
         <div>
-
-          <label className="block font-medium mb-2">
-            Price (USD)
-          </label>
-
+          <label className="mb-2 block font-medium">Price (ZAR)</label>
           <input
             type="number"
             min="0"
             step="0.01"
             value={price}
-            onChange={(e) =>
-              setPrice(e.target.value)
-            }
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+            onChange={(e) => setPrice(e.target.value)}
+            className={fieldClass}
           />
-
         </div>
-
       </div>
 
-      {/* Tags */}
-
       <div>
-
-        <label className="block font-medium mb-2">
-          Tags
-        </label>
-
+        <label className="mb-2 block font-medium">Tags</label>
         <input
           type="text"
           value={tags}
-          onChange={(e) =>
-            setTags(e.target.value)
-          }
+          onChange={(e) => setTags(e.target.value)}
           placeholder="react, dashboard, admin"
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+          className={fieldClass}
         />
-
       </div>
 
-      {/* Status */}
-
       <div>
-
-        <label className="block font-medium mb-3">
-          Product Status
-        </label>
-
-        <div className="flex gap-4">
-
+        <label className="mb-3 block font-medium">Product Status</label>
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={() => setStatus("draft")}
-            className={`px-5 py-2 rounded-lg ${
+            className={`rounded-lg px-5 py-2 font-semibold transition ${
               status === "draft"
-                ? "bg-gray-900 text-white dark:bg-amber-400 dark:text-black"
-                : "bg-gray-200 dark:bg-gray-700"
+                ? "bg-sky-500 text-white"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200"
             }`}
           >
             Draft
           </button>
-
           <button
             type="button"
             onClick={() => setStatus("active")}
-            className={`px-5 py-2 rounded-lg ${
+            className={`rounded-lg px-5 py-2 font-semibold transition ${
               status === "active"
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 dark:bg-gray-700"
+                ? "bg-sky-500 text-white"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200"
             }`}
           >
             Publish
           </button>
-
         </div>
-
       </div>
 
-      {/* Uploads */}
-
-      <div className="space-y-6 border-t border-gray-200 dark:border-gray-700 pt-6">
-
-        <ImageUploader
-          value={image}
-          onChange={setImage}
-        />
-
-        <FileUploader
-          value={files}
-          onChange={setFiles}
-        />
-
+      <div className="space-y-6 border-t border-slate-200 pt-6 dark:border-slate-700">
+        <ImageUploader value={image} onChange={setImage} />
+        <FileUploader value={files} onChange={setFiles} />
       </div>
-
-      {/* Submit */}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-amber-400 hover:bg-amber-500 text-black font-bold py-3 rounded-xl transition disabled:opacity-50"
+        className="w-full rounded-xl bg-sky-500 py-3 font-bold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? "Saving Product..." : "Save Product"}
       </button>
-
     </form>
   );
-
 };
 
 export default ProductForm;

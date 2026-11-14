@@ -1,406 +1,133 @@
 import React from "react";
-
-import {
-  ProductFormData,
-} from "./CreateProduct";
-
-
+import { ProductFormData } from "./CreateProduct";
 
 type ReviewStepProps = {
   product: ProductFormData;
 };
 
-
-
-const ReviewStep: React.FC<ReviewStepProps> = ({
-  product,
-}) => {
-
-
+const ReviewStep: React.FC<ReviewStepProps> = ({ product }) => {
   const formatSize = (bytes: number) => {
-
-    if (bytes < 1024) {
-      return `${bytes} B`;
-    }
-
-
-    if (bytes < 1024 * 1024) {
-      return `${(bytes / 1024).toFixed(1)} KB`;
-    }
-
-
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-
   };
 
+  const imagePreview = product.image
+    ? URL.createObjectURL(product.image)
+    : null;
 
-
-
+  React.useEffect(() => {
+    return () => {
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+    };
+  }, [imagePreview]);
 
   return (
-
-    <div className="space-y-8">
-
-
+    <div className="space-y-8 text-slate-800 dark:text-slate-100">
       <div>
-
-        <h2 className="text-2xl font-bold">
-          Review Product
-        </h2>
-
-
-        <p className="text-gray-500 mt-1">
+        <h2 className="text-2xl font-bold">Review Product</h2>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">
           Check everything before publishing your product.
         </p>
-
       </div>
-
-
-
-
-
-
-
-      {/* IMAGE PREVIEW */}
 
       <div>
-
-        <h3 className="font-semibold mb-3">
-          Product Image
-        </h3>
-
-
-        {product.image ? (
-
+        <h3 className="mb-3 font-semibold">Product Image</h3>
+        {imagePreview ? (
           <img
-            src={URL.createObjectURL(product.image)}
-            alt={product.title}
-            className="
-              w-full
-              max-w-sm
-              h-60
-              object-cover
-              rounded-xl
-              border
-            "
+            src={imagePreview}
+            alt={product.title || "Product preview"}
+            className="h-60 w-full max-w-sm rounded-xl border border-slate-200 object-cover dark:border-slate-700"
           />
-
         ) : (
-
-          <div
-            className="
-              w-full
-              max-w-sm
-              h-60
-              rounded-xl
-              bg-gray-200
-              dark:bg-gray-700
-              flex
-              items-center
-              justify-center
-              text-gray-500
-            "
-          >
-
+          <div className="flex h-60 w-full max-w-sm items-center justify-center rounded-xl bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
             No Image Selected
-
           </div>
-
         )}
-
       </div>
 
+      <section className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
+        <h3 className="text-xl font-bold">Product Information</h3>
 
-
-
-
-
-
-
-      {/* PRODUCT INFORMATION */}
-
-      <div
-        className="
-          bg-gray-50
-          dark:bg-gray-800
-          rounded-xl
-          p-6
-          space-y-4
-        "
-      >
-
-        <h3 className="text-xl font-bold">
-          Product Information
-        </h3>
-
-
-
-        <div>
-
-          <p className="text-sm text-gray-500">
-            Title
-          </p>
-
-          <p className="font-semibold">
-            {product.title || "-"}
-          </p>
-
-        </div>
-
-
-
-
-
-        <div>
-
-          <p className="text-sm text-gray-500">
-            Category
-          </p>
-
-          <p className="font-semibold">
-            {product.category || "-"}
-          </p>
-
-        </div>
-
-
-
-
-
-        <div>
-
-          <p className="text-sm text-gray-500">
-            Short Description
-          </p>
-
-          <p>
-            {product.short_description || "-"}
-          </p>
-
-        </div>
-
-
-
-
-
-        <div>
-
-          <p className="text-sm text-gray-500">
-            Description
-          </p>
-
-          <p className="whitespace-pre-line">
-            {product.description || "-"}
-          </p>
-
-        </div>
-
-
-
-
-
-        <div>
-
-          <p className="text-sm text-gray-500">
-            Tags
-          </p>
-
-
-          <div className="flex flex-wrap gap-2 mt-2">
-
-            {product.tags.length > 0 ? (
-
-              product.tags.map((tag: string) => (
-
-                <span
-                  key={tag}
-                  className="
-                    px-3
-                    py-1
-                    rounded-full
-                    bg-amber-100
-                    text-amber-700
-                    text-sm
-                  "
-                >
-
-                  {tag}
-
-                </span>
-
-              ))
-
-            ) : (
-
-              <span>
-                No tags
-              </span>
-
-            )}
-
+        {[
+          ["Title", product.title],
+          ["Category", product.category],
+          ["Short Description", product.short_description],
+        ].map(([label, value]) => (
+          <div key={label}>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+            <p className="font-semibold">{value || "-"}</p>
           </div>
+        ))}
 
-
+        <div>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Description</p>
+          <p className="whitespace-pre-line">{product.description || "-"}</p>
         </div>
 
+        <div>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Tags</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {product.tags.length > 0 ? (
+              product.tags.map((tag, index) => (
+                <span
+                  key={`${tag}-${index}`}
+                  className="rounded-full bg-sky-100 px-3 py-1 text-sm text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                >
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <span className="text-slate-500 dark:text-slate-400">No tags</span>
+            )}
+          </div>
+        </div>
+      </section>
 
-      </div>
-
-
-
-
-
-
-
-
-      {/* PRICE */}
-
-      <div
-        className="
-          bg-gray-50
-          dark:bg-gray-800
-          rounded-xl
-          p-6
-        "
-      >
-
-        <h3 className="text-xl font-bold mb-4">
-          Pricing
-        </h3>
-
-
+      <section className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
+        <h3 className="mb-4 text-xl font-bold">Pricing</h3>
         <p>
-
           Price:
-
-          <span className="font-bold ml-2 text-amber-500">
-
-            ${product.price || "0.00"}
-
+          <span className="ml-2 font-bold text-sky-600 dark:text-sky-400">
+            R{Number(product.price || 0).toFixed(2)}
           </span>
-
         </p>
-
-
-        <p className="mt-2">
-
+        <p>
           Status:
-
-          <span className="font-semibold ml-2">
-            {product.status}
-          </span>
-
+          <span className="ml-2 font-semibold capitalize">{product.status}</span>
         </p>
-
-
-        <p className="mt-2">
-
+        <p>
           Featured:
-
-          <span className="font-semibold ml-2">
-
-            {product.featured
-              ? "Yes"
-              : "No"}
-
+          <span className="ml-2 font-semibold">
+            {product.featured ? "Yes" : "No"}
           </span>
-
         </p>
+      </section>
 
-
-      </div>
-
-
-
-
-
-
-
-
-
-      {/* FILES */}
-
-      <div
-        className="
-          bg-gray-50
-          dark:bg-gray-800
-          rounded-xl
-          p-6
-        "
-      >
-
-        <h3 className="text-xl font-bold mb-4">
-          Digital Files
-        </h3>
-
-
-
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-800">
+        <h3 className="mb-4 text-xl font-bold">Digital Files</h3>
         {product.files.length === 0 ? (
-
-          <p className="text-gray-500">
-            No files uploaded.
-          </p>
-
-
+          <p className="text-slate-500 dark:text-slate-400">No files uploaded.</p>
         ) : (
-
-
           <div className="space-y-3">
-
-
-            {product.files.map((file: File) => (
-
+            {product.files.map((file, index) => (
               <div
-                key={`${file.name}-${file.size}`}
-                className="
-                  flex
-                  justify-between
-                  items-center
-                  bg-white
-                  dark:bg-gray-900
-                  rounded-lg
-                  p-4
-                "
+                key={`${file.name}-${file.size}-${index}`}
+                className="flex items-center justify-between rounded-lg bg-white p-4 dark:bg-slate-900"
               >
-
-                <div>
-
-                  <p className="font-medium">
-                    {file.name}
-                  </p>
-
-
-                  <p className="text-sm text-gray-500">
+                <div className="min-w-0">
+                  <p className="break-all font-medium">{file.name}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
                     {formatSize(file.size)}
                   </p>
-
-
                 </div>
-
-
               </div>
-
             ))}
-
-
           </div>
-
-
         )}
-
-
-
-      </div>
-
-
-
-
-
+      </section>
     </div>
-
   );
-
 };
-
 
 export default ReviewStep;

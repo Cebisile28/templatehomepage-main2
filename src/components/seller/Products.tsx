@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 
@@ -26,9 +26,11 @@ const Products: React.FC = () => {
 
     const {
       data: { user },
+      error: userError,
     } = await supabase.auth.getUser();
 
-    if (!user) {
+    if (userError || !user) {
+      setProducts([]);
       setLoading(false);
       return;
     }
@@ -39,118 +41,150 @@ const Products: React.FC = () => {
       .eq("seller_id", user.id)
       .order("created_at", { ascending: false });
 
-    if (!error && data) {
-      setProducts(data as Product[]);
+    if (error) {
+      console.error("Unable to load products:", error.message);
+    } else {
+      setProducts((data || []) as Product[]);
     }
 
     setLoading(false);
   };
 
   const deleteProduct = async (id: string) => {
-    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
 
     if (!confirmed) return;
 
     const { error } = await supabase.from("products").delete().eq("id", id);
 
-    if (!error) {
-      void loadProducts();
+    if (error) {
+      window.alert(`Unable to delete product: ${error.message}`);
+      return;
     }
+
+    await loadProducts();
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(search.toLowerCase())
+  const filteredProducts = useMemo(
+    () =>
+      products.filter((product) =>
+        product.title.toLowerCase().includes(search.toLowerCase())
+      ),
+    [products, search]
   );
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <p className="text-gray-500 dark:text-gray-400">Loading your products...</p>
+        <p className="text-slate-500 dark:text-slate-400">
+          Loading your products...
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
-          <p className="mt-3 text-gray-500 dark:text-gray-400">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Products
+          </h1>
+          <p className="mt-3 text-slate-500 dark:text-slate-400">
             Create, manage, and track your digital products.
           </p>
         </div>
 
         <Link
           to="/seller/products/create"
-          className="mt-5 rounded-xl bg-amber-400 px-6 py-3 text-center font-semibold text-black transition hover:bg-amber-300 md:mt-0"
+          className="rounded-xl bg-sky-500 px-6 py-3 text-center font-semibold text-white transition hover:bg-sky-600"
         >
           + Add Product
         </Link>
       </div>
 
       <div className="grid gap-6 md:grid-cols-4">
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
-          <p className="text-sm text-gray-500">Total Products</p>
-          <h2 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{products.length}</h2>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
-          <p className="text-sm text-gray-500">Active Products</p>
-          <h2 className="mt-2 text-3xl font-bold text-green-500">
-            {products.filter((product) => product.status === "active").length}
-          </h2>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
-          <p className="text-sm text-gray-500">Draft Products</p>
-          <h2 className="mt-2 text-3xl font-bold text-amber-400">
-            {products.filter((product) => product.status === "draft").length}
-          </h2>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
-          <p className="text-sm text-gray-500">Product Sales</p>
-          <h2 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">R0.00</h2>
-        </div>
+        {[
+          {
+            label: "Total Products",
+            value: products.length,
+            style: "text-slate-900 dark:text-white",
+          },
+          {
+            label: "Active Products",
+            value: products.filter((p) => p.status === "active").length,
+            style: "text-sky-600 dark:text-sky-400",
+          },
+          {
+            label: "Draft Products",
+            value: products.filter((p) => p.status === "draft").length,
+            style: "text-slate-600 dark:text-slate-300",
+          },
+          {
+            label: "Product Sales",
+            value: "R0.00",
+            style: "text-slate-900 dark:text-white",
+          },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+          >
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {stat.label}
+            </p>
+            <h2 className={`mt-2 text-3xl font-bold ${stat.style}`}>
+              {stat.value}
+            </h2>
+          </div>
+        ))}
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search your products..."
-          className="w-full rounded-lg bg-gray-100 p-3 text-gray-900 outline-none dark:bg-gray-800 dark:text-white"
+          className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900/40"
         />
       </div>
 
-      <section className="rounded-xl border border-gray-200 bg-white p-6 shadow dark:border-gray-800 dark:bg-gray-900">
-        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">Your Products</h2>
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">
+          Your Products
+        </h2>
 
         {filteredProducts.length === 0 ? (
-          <div className="py-10 text-center text-gray-500 dark:text-gray-400">
-            No products found.
+          <div className="py-10 text-center text-slate-500 dark:text-slate-400">
+            {search ? "No products match your search." : "No products yet."}
             <br />
             Create your first digital product.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left">
+            <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-gray-500 dark:border-gray-800">
-                  <th className="p-3">Product</th>
-                  <th className="p-3">Category</th>
-                  <th className="p-3">Price</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Created</th>
-                  <th className="p-3">Actions</th>
+                <tr className="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
+                  {["Product", "Category", "Price", "Status", "Created", "Actions"].map(
+                    (heading) => (
+                      <th key={heading} className="whitespace-nowrap p-3">
+                        {heading}
+                      </th>
+                    )
+                  )}
                 </tr>
               </thead>
 
               <tbody>
                 {filteredProducts.map((product) => (
-                  <tr key={product.id} className="border-b border-gray-200 dark:border-gray-800">
-                    <td className="p-3 text-gray-900 dark:text-white">
+                  <tr
+                    key={product.id}
+                    className="border-b border-slate-100 dark:border-slate-800"
+                  >
+                    <td className="p-3 text-slate-900 dark:text-white">
                       <div className="flex items-center gap-3">
                         {product.image_url ? (
                           <img
@@ -159,52 +193,53 @@ const Products: React.FC = () => {
                             className="h-12 w-12 rounded-lg object-cover"
                           />
                         ) : (
-                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200 text-xs dark:bg-gray-800">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-xs text-slate-500 dark:bg-slate-800">
                             No Image
                           </div>
                         )}
-
                         <span className="font-semibold">{product.title}</span>
                       </div>
                     </td>
 
-                    <td className="p-3 text-gray-500 dark:text-gray-400">
+                    <td className="p-3 text-slate-500 dark:text-slate-400">
                       {product.category || "Uncategorized"}
                     </td>
-
-                    <td className="p-3 font-semibold text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap p-3 font-semibold text-slate-900 dark:text-white">
                       R{Number(product.price).toFixed(2)}
                     </td>
-
                     <td className="p-3">
                       <span
-                        className={`rounded-full px-3 py-1 text-sm ${
+                        className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${
                           product.status === "active"
-                            ? "bg-green-100 text-green-700"
-                            : product.status === "draft"
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-gray-100 text-gray-700"
+                            ? "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                            : "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
                         }`}
                       >
                         {product.status}
                       </span>
                     </td>
-
-                    <td className="p-3 text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap p-3 text-slate-500 dark:text-slate-400">
                       {new Date(product.created_at).toLocaleDateString()}
                     </td>
-
-                    <td className="p-3">
-                      <div className="flex gap-3">
-                        <button className="text-blue-500 hover:text-blue-700">Edit</button>
-
-                        <button
-                          onClick={() => void deleteProduct(product.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                    <td className="whitespace-nowrap p-3">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          window.alert(
+                            "Connect this button to your product editing page."
+                          )
+                        }
+                        className="mr-3 font-medium text-sky-600 hover:text-sky-800 dark:text-sky-400"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void deleteProduct(product.id)}
+                        className="font-medium text-red-500 hover:text-red-700"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

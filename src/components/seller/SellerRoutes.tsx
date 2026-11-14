@@ -25,8 +25,7 @@ const SellerRoutes: React.FC = () => {
     <ProtectedRoute requiredRole="seller">
       <SellerLayout>
         <Routes>
-
-          {/* /seller redirects to /seller/dashboard */}
+          {/* Redirect /seller to the dashboard */}
           <Route
             index
             element={
@@ -37,13 +36,13 @@ const SellerRoutes: React.FC = () => {
             }
           />
 
-          {/* Seller dashboard */}
+          {/* Seller Dashboard */}
           <Route
             path="dashboard"
             element={<SellerDashboard />}
           />
 
-          {/* Seller profile */}
+          {/* Seller Profile */}
           <Route
             path="profile"
             element={<SellerProfile />}
@@ -60,7 +59,7 @@ const SellerRoutes: React.FC = () => {
             element={<CreateProduct />}
           />
 
-          {/* Orders and customers */}
+          {/* Orders and Customers */}
           <Route
             path="orders"
             element={<Orders />}
@@ -71,7 +70,7 @@ const SellerRoutes: React.FC = () => {
             element={<Customers />}
           />
 
-          {/* Business management */}
+          {/* Business Growth */}
           <Route
             path="analytics"
             element={<Analytics />}
@@ -82,17 +81,19 @@ const SellerRoutes: React.FC = () => {
             element={<Reviews />}
           />
 
+          {/* Finance */}
           <Route
             path="earnings"
             element={<Earnings />}
           />
 
+          {/* Settings */}
           <Route
             path="settings"
             element={<Settings />}
           />
 
-          {/* Unknown seller pages return to dashboard */}
+          {/* Unknown seller pages */}
           <Route
             path="*"
             element={
@@ -102,7 +103,6 @@ const SellerRoutes: React.FC = () => {
               />
             }
           />
-
         </Routes>
       </SellerLayout>
     </ProtectedRoute>
@@ -110,6 +110,7 @@ const SellerRoutes: React.FC = () => {
 };
 
 export default SellerRoutes;
+
 
 
 
